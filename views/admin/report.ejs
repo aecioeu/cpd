@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+
+<html lang="pt-br" data-textdirection="ltr">
+<%- include("partials/header") %>
+<link href="/css/flatpickr.min.css" rel="stylesheet" type="text/css">
+    <style>
+            .border-primary {
+                border-color: #434343!important;
+            }
+
+            table {
+                background-color: white;
+    border-collapse:separate;
+    border:solid black 1px;
+    border-radius:6px;
+}
+
+
+
+th {
+    background-color: blue;
+    border-top: none;
+}
+
+tr:first-child, th:first-child {
+     border-left: none;
+
+}
+tr:last-child {
+    
+     border-bottom: white;
+}
+
+        @media print {
+        body {
+            background-color: white;
+        }
+
+        .card {
+    
+    border-radius: 0.25rem;
+    border: 1px solid #e2e7f1;
+}
+
+.card-body {
+    flex: 1 1 auto;
+    padding: 1.25rem 1.25rem;
+}
+
+#range-datepicker{
+    display: none;
+}
+        
+    
+    }
+
+
+
+    </style>
+
+
+
+    <!-- BEGIN: Body-->
+
+    <body data-sidebar-size="default" data-layout-width="fluid" data-layout-menu-position="fixed"
+        data-sidebar-color="light" data-sidebar-showuser="false" data-topbar-color="light">
+        <!-- Begin page -->
+        <div id="wrapper">
+
+            <%- include("partials/nav") %>
+                <%- include("partials/menu") %>
+
+                    <!-- ============================================================== -->
+                    <!-- Start Page Content here -->
+                    <!-- ============================================================== -->
+
+                    <div class="content-page">
+                        <div class="content">
+
+                            <div class="container-fluid">
+
+                            
+                    
+
+
+
+                <div class="row page-title align-items-center">
+                    <div class="col-sm-6 col-xl-6">
+                        <div>
+                        <h3 class="mb-1 mt-3">Relatório de Tarefas</h3>
+                        <p class="sub-header">
+                           Relatório detalhado de tarefas executadas no CPD.
+                         </p>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-6">
+                        
+                        <div class="d-lg-flex align-items-center mb-2 mt-3" style="text-align: right;">
+                         
+                           
+                            <div class="file-search me-1">
+                                <form>
+                                    <div class="input-group align-items-right">
+                                       
+                                        <input type="text" id="range-datepicker" class=" form-control flatpickr-input bg-light active border-0 mt-1" placeholder="2018-10-03 to 2018-10-10" readonly="readonly">
+                                    </div>
+                                </form>
+                            </div> 
+
+                          
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row tarefas">
+
+                    <div class="load spinner-border text-primary m-2 justify-content-center"
+                        role="status">
+                        <span class="visually-hidden">Carregando...</span>
+                    </div>
+
+                </div>
+
+
+
+                <div class="table-responsive">
+                    <table class="table table-sm mb-3">
+                       
+                        <tbody>
+                            <tr>
+                                <td>Data do Relatório</td>
+                                <td><span class="start"></span> até <span class="end"></td>
+                            </tr>
+                            <tr>
+                                <td>Responsável pelo Relatório</td>
+                                <td><%-user.name%></td>
+                            </tr>
+
+                            <tr>
+                                <td>Total de Tarefas Executadas</td>
+                                <td><span class="taskperiod"></span></td>
+                            </tr>
+
+                            <tr>
+                                <td>Tarefas de Manutenção de Equipamentos<br><small>Concerto e manutenção em CPUs, Monitores, Impressoras, etc.</small></td>
+                                <td><span class="in"></span> (<span class="manutent"></span> equipamentos)</td>
+                            </tr>
+
+                            <tr>
+                                <td>Tarefas de Auxilio aos Usuários<br><small>Ajuda na instalação de programas, softwares, cabeamentos de rede, configurações em geral, acesso remoto, solução de dúvidas, remoção de malwares, etc.</small></td>
+                                <td><span class="out"></span></td>
+                            </tr>
+                          
+                          
+                            
+                        </tbody>
+                    </table>
+                </div>
+
+
+
+                <div class="row">
+                    <div class="col-6 col-xl-3">
+                        <div class="card">
+                            <div class="card-body p-0">
+                                <div class="media p-3">
+                                    <div class="media-body">
+                                        <span class="text-muted text-uppercase font-size-12 font-weight-bold">Tarefas CONCLUÍDAS no PERÍODO</span>
+                                        <h2 class="mb-0 taskperiod">0</h2>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <div id="today-revenue-chart" class="apex-charts"></div>
+                                        <span class="text-success font-weight-bold font-size-13"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-xl-3">
+                        <div class="card">
+                            <div class="card-body p-0">
+                                <div class="media p-3">
+                                    <div class="media-body">
+                                        <span class="text-muted text-uppercase font-size-12 font-weight-bold">Setores Atendidos</span>
+                                        <h2 class="mb-0 totalsectors">0</h2>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <div id="today-product-sold-chart" class="apex-charts"></div>
+                                        <span class="text-danger font-weight-bold font-size-13"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-xl-3">
+                        <div class="card">
+                            <div class="card-body p-0">
+                                <div class="media p-3">
+                                    <div class="media-body">
+                                        <span class="text-muted text-uppercase font-size-12 font-weight-bold">Manutenções Equipamentos</span>
+                                        <h2 class="mb-0 manutent">0</h2>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <div id="today-new-customer-chart" class="apex-charts"></div>
+                                        <span class="text-success font-weight-bold font-size-13"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-xl-3">
+                        <div class="card">
+                            <div class="card-body p-0">
+                                <div class="media p-3">
+                                    <div class="media-body">
+                                        <span class="text-muted text-uppercase font-size-12 font-weight-bold">Valor equipamentos Atualizado</span>
+                                        <h2 class="mb-0 totavalue">0</h2>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <div id="today-new-visitors-chart" class="apex-charts"></div>
+                                        <span class="text-danger font-weight-bold font-size-13"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+
+     
+
+                               
+
+                                <!-- tasks panel -->
+
+                                 
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <h4 class="header-title mt-0 mb-3">Atendimento das Tarefas (Por técnico)</h4>
+                
+                                                <div id="tecnicos" class="apex-charts" dir="ltr"></div>
+
+                                            </div>
+                                            <div class="col-6">
+                                                <h4 class="header-title mt-0 mb-3">Resumo</h4>
+                                                <p>No período de <span class="start"></span> até <span class="end"></span> foram atendidas pelos técnicos do CPD, <span class="taskperiod"></span> tarefas.</p>
+                             
+
+                                                <h4 class="header-title mt-0 mb-3">Tempo Médio de Conclusão de tarefa.</h4>
+
+                                                <div class="table-responsive">
+                                                    <table class="table table-sm mb-2 conslusionTime">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">Técnico</th>
+                                                                <th scope="col">Tempo</th>
+                                                                <th scope="col">Atendimentos</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        
+                                                          
+                                                            
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                
+
+                                              
+
+                                            </div>
+                                        </div>
+                                   
+                                         
+                                           
+                                       
+                                               
+
+                                                
+                                                        
+                                    </div> <!-- end col-->
+                                
+                                </div> <!-- end card-body -->
+                            </div> <!-- end card-->
+                
+                            
+
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h4 class="header-title mt-0 mb-3">Mapeamento de Tarefas por hora</h4>
+
+                                                <div id="apex-line-2" class="apex-charts" dir="ltr"></div>
+                                            </div> <!-- end card-body -->
+                                        </div> <!-- end card-->
+                                    </div> <!-- end col-->
+                              
+
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <!-- Portlet card -->
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h4 class="header-title mt-0 mb-3">10 Setores que mais solicitaram CPD</h4>
+        
+                                                <div id="apex-bar-1" class="apex-charts"></div>
+                                            </div> <!-- end card-body -->
+                                        </div> <!-- end card-->
+                                    </div> <!-- end col-->
+                                    <div class="col-12">
+
+                                        <div class="card">
+                                            <div class="card-body">
+                                        
+                                               <h6>⚠️ MANUTENÇÃO PREVENTIVA DE HARDWARE E AJUDA AOS USUÁRIOS(SUGESTÃO AUTOMÁTICA)</h6> 
+                                               <p>
+
+                                                Sujestão dos setores em que devem ser feitos, com maior urgência, trabalho de MANUTENÇÃO PREVENTIVA DE HARDWARE e E AJUDA AOS USUÁRIOS.
+                                                <br>
+                                                <span class="top5"></span>
+
+                                                <br><br>Juntos esses setores representam <span class="percent"></span>% de todas as Tarefas de Manutenção e de Auxílio aos Usuários. Esse indicador mostra que a realização de manutenção preventiva direcionada a esses setores pode reduzir esse indicador e melhorar a qualidade e produtividade dos setores.
+                                         
+
+                                               </p>
+                                            
+                                            </div>
+
+                                            </div>
+
+                               
+                                    </div>
+
+                                    
+
+                                    <div class="col-12">
+                                    <div class="accordion custom-accordionwitharrow" id="accordionExample">
+                                        <div class="card mb-1 shadow-none border">
+                                            <a href="" class="text-dark collapsed" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                                <div class="card-header" id="headingOne">
+                                                    <h5 class="m-0 fs-16">
+                                                        Acompanhamento de solicitação por setor (Detalhado)
+                                                        <i class="uil uil-angle-down float-end accordion-arrow"></i>
+                                                    </h5>
+                                                </div>
+                                            </a>
+
+                                            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample" style="">
+                                                <div class="card-body text-muted">
+                                                   
+
+                                                    <div class="table-responsive">
+                                                        <table class="totaloccurencedetalhed table table-sm mb-0">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th scope="col">#</th>
+                                                                    <th scope="col">Setor</th>
+                                                                    <th scope="col">Solicitações</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                
+                                                                
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                       
+                                        
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="accordion custom-accordionwitharrow" id="accordionExample2">
+                                        <div class="card mb-1 shadow-none border">
+                                            <a href="" class="text-dark collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseOne">
+                                                <div class="card-header" id="headingOne">
+                                                    <h5 class="m-0 fs-16">
+                                                        Acompanhamento de solicitação por Servidor (Detalhado)
+                                                        <i class="uil uil-angle-down float-end accordion-arrow"></i>
+                                                    </h5>
+                                                </div>
+                                            </a>
+
+                                            <div id="collapseTwo" class="collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample2" style="">
+                                                <div class="card-body text-muted">
+                                                   
+
+                                                    <div class="table-responsive">
+                                                        <table class="totaloccurencedetalhedServidor table table-sm mb-0">
+                                                            <thead>
+                                                                <tr>
+                                                                    
+                                                                    <th scope="col">Servidor</th>
+                                                                    <th scope="col">Solicitações</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                
+                                                                
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                       
+                                        
+                                    </div>
+                                </div>
+        
+                                 
+                              
+                                </div>
+                                <!-- end row -->
+
+
+
+                                
+
+                            </div>
+                        </div> <!-- content -->
+
+                    </div>
+
+                    <%- include('partials/footer') %>
+                    <script src="/js/flatpickr.min.js"></script>
+                    <script src="/js/pt.js"></script>
+                    <script src="/js/apexcharts.min.js"></script>
+
+                    <script src="/js/report.init.js?v=<%-Date.now()%>"></script>
+
+
+
+
+
+
+    </body>
+    <!-- END: Body-->
+
+</html>

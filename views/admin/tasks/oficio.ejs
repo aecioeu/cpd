@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+
+<html lang="pt-br" data-textdirection="ltr">
+<%- include("../partials/header") %>
+
+<!-- BEGIN: Body-->
+<style>
+    .only-print{
+      display: none;
+    }
+
+  @media print {
+
+    .only-print{
+      display: block;
+    }
+
+    body{
+      color: #000 !important;
+    }
+    .select2 , .tasks_notes{
+      display: none !important
+    }
+
+    [data-bs-target="#offcanvasRight"]{
+      display: none !important
+
+    }
+    body{
+      margin-left: 0px;
+    }
+
+    .noprint{
+      display: none !important;
+    }
+
+    .border-right{
+      border-right: 1px solid #ebeef5 !important;
+    }
+    hr:not([size]) {
+    height: 1px;
+    }
+
+  
+
+    .table > :not(:last-child) > :last-child > * {
+    border-bottom-color: #ebeef5;
+}
+
+tbody, td, tfoot, th, thead, tr {
+    border-color: inherit;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #ebeef5;
+    border-radius: 47px;
+}
+
+    hr {
+    margin: 1.5rem 0;
+    height: 10px;
+    border-bottom: 1px solid #ebeef5 !important;
+    
+    color: #000 !important;
+    background-color: #fff;
+    border: 0;
+    opacity: 1;
+}
+    [data-bs-target="#offcanvasRight"]{
+      display: none !important
+
+    }
+    body{
+      margin-left: 0px;
+    }
+
+
+
+  }
+
+  .offcanvas-end{
+
+    width: 40vw;
+  }
+
+  div#offcanvasBottom{
+  height: 50vh;
+ }
+ .message{
+  padding: 2.5rem 3rem  !important
+ }
+  
+</style>
+
+<body data-sidebar-size="default" data-layout-width="fluid" data-layout-menu-position="fixed" data-sidebar-color="light" data-sidebar-showuser="false" data-topbar-color="light">
+  <!-- Begin page -->
+  <div id="wrapper">
+
+    <%- include("../partials/nav") %>
+    <%- include("../partials/menu") %>
+
+      
+    <!-- ============================================================== -->
+    <!-- Start Page Content here -->
+    <!-- ============================================================== -->
+    <div class="content-page">
+      <div class="content">
+     
+       
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasTopLabel">
+          <div class="offcanvas-header  mb-0 pb-0">
+              <h5 id="offcanvasRightLabel">INSERIR SERVIÇO</h5>
+              <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+
+            <label class="form-label fs-13 mt-2 mb-1">PATRIMÔNIO</label>
+            <h5 class="text-dark fs-17 mb-0 patrimonio_ref">
+              
+            </h5>
+          
+            <form action="#" id="services" method="post" class="parsley-examples">
+
+              <div class="mb-1 row">
+                
+                <div class="col-lg-12">
+               
+                  <select class="form-select" style="display:none" name="ref_patrimonio">
+                   
+                 
+                  </select>
+                </div>
+              </div>
+
+               <!-- end row -->
+            <div class="mb-1 row">
+              <div class="col-lg-12">
+                <label class="form-label fs-13 mt-2 mb-1">INFORMAÇÕES:</label>
+
+
+
+                <select class="form-select" name="service" data-plugin="select_service">
+                </select>
+
+              </div>
+
+
+            </div>
+
+           
+
+
+              <div class="mb-1 row">
+                                         <div class="col-lg-12">
+                  <label class="form-label fs-13 mt-2 mb-1" for="destino">OBSERVAÇÃO</label>
+                     <textarea class="form-control" rows="3" name="service" id="service"></textarea>
+                </div>
+              </div>
+
+              
+              <div class="mt-3 mb-1">
+                <div class="text-end d-print-none">
+                  <button type="submit" class="btn btn-primary btn-block w-100 mb-0"><i class="uil uil-focus-add mr-2"></i>Inserir serviço</button>
+                   
+
+                   
+                </div>
+              </div>
+
+            </form>
+            
+          </div>
+      </div>
+
+ <!-- FINALIZAR TAREFA-->
+
+ 
+       
+       
+       
+        <!-- Start Content-->
+        <div class="container-fluid">
+
+          <!-- start page title -->
+          <div class="row">
+            <div class="col-12">
+              <div class="page-title-box">
+                <h4 class="page-title">Criando  Laudo da Tarefa #<%- data.task_id %>
+                </h4>
+                <div class="page-title-right">
+                  <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Tarefas</a></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- end page title -->
+
+          <div class="row">
+            <div class="col-xl-8">
+              <div class="card">
+
+                <div class="card-body">
+
+                                    
+                      <%-include('../partials/components/header-cpd.ejs') %> 
+                      <hr class="mt-2 mb-2">
+                      <div class="row">
+                   
+
+                        <div class="col-sm-12">
+                          <h5 class="text-dark fs-20 mb-2 text-center">
+                            LAUDO TÉCNICO <select class="tipo">
+                              <option value="garantia">GARANTIA</option>
+                              <option value="baixa">BAIXA</option>
+                              <option value="conformidade">CONFORMIDADE</option>
+                        
+                            </select> <label class="badge badge-soft-success">EM EDIÇÃO</label>  
+                          </h5>
+
+                          <span class="float-start fs-15 mt-3 mb-1">
+                          <b>Laudo Técnico</b><br>
+                          Centro de Processamento de Dados – CPD<br>
+                          <b>Assunto:</b> Solicitação de verificação e laudo técnico Ref: Tarefa #<%-data.task_id-%>.
+                          </span>
+                          </div>
+                          <div class="col-sm-12">
+                          <span class="float-start fs-15 mt-2 mb-1">
+                            <b>Para:</b> <%-data.name%><br>
+                            <b>Secretaria:</b><%-data.secretaria%><br>
+                            <b>Setor:</b> <%-data.location%><br>
+                          </span>
+                          </div>
+
+                         
+                        <div class="col-sm-12 ">
+                        
+                            <span class="float-end fs-15 mb-2" >Lagoa da Prata, <span class="created_time"><%-new Date();%></span></span>
+  
+                       
+                        <textarea class="form-control mt-2" rows="6" name="description" id="description" required=""></textarea>
+                        </div>
+
+
+                     
+                        </div>
+                      
+                      
+              
+                    
+                
+                      <div class="row">
+                        <div class="col-12">
+
+
+
+                          <table id="patrimonio_vinculado" class="table mt-1 table-centered">
+                            <thead>
+                              <tr>
+                               
+                                <th style="width: 15%" class="fs-13">PLAQUETA</th>
+                                <th class="fs-13">DESCRIÇÃO</th>
+                                <th style="width: 5%" class="fs-13">INCLUIDO</th>
+                                <!-- <th style="width: 10%">Hours</th>
+                                                                    <th style="width: 10%">Hours Rate</th>
+                                                                    <th style="width: 10%" class="text-end">Total</th>-->
+                              </tr>
+                            </thead>
+
+
+
+                            
+                          </table>
+
+                          <textarea class="form-control mt-2" rows="3" name="descriptionend" id="descriptionend" required="">Estamos empenhados em garantir a sua plena satisfação e resolução dessas questões, e permanecemos à disposição para qualquer suporte adicional necessário. Agradecemos pela compreensão e colaboração até o momento.</textarea>
+                      
+
+                        </div> <!-- end col -->
+                      </div>
+                      <!-- end row -->
+
+                      <div class="row">
+                        <div class="col-md-12 mt-4">
+                    
+
+                            <span class="fs-13 mt-4 mb-1">
+                            _______________________________________________<br>
+                            <%-user.fullName%><br>
+                            <%-user.function%>
+                              
+                            </span>
+                           
+                
+                          
+
+                      
+                            
+
+                        
+                     
+                           
+
+                        </div> <!-- end col -->
+                   
+
+
+
+                      </div>
+
+                     
+
+                      <div class="mt-3 mb-1">
+                        <div class="text-end d-print-none">
+                          
+                          <button class="btn btn-primary" type="button" onclick="checkCreate('<%-user.name%>, ao criar esse laudo técncio ele será anexado a ordem de serviço.', '/tasks/complete/<%-data.task_id-%>')">Criar Laudo</button>
+                            
+                           
+                  
+
+                        </div>
+                      </div>
+
+
+          
+
+         
+
+
+             
+            </div> <!-- end col -->
+
+
+          </div>
+          <!-- end row -->
+
+        </div> <!-- container -->
+
+     
+
+    
+
+    </div>
+   
+   
+ 
+
+    <%- include('../partials/footer') %>
+    <script src='/js/jquery-ui.js' type='text/javascript'></script>
+    <script src='/js/jquery.mentions.js' type='text/javascript'></script>
+    <link href="/css/ui.css" rel="stylesheet" type="text/css" id="app-default-stylesheet">
+    <script src="/js/jquery.dataTables.min.js"></script>
+    <script src="/js/jquery.migrate.js"></script>
+
+
+    
+
+
+   
+   
+    <script>
+$(function () {
+//$('.mentions').mentionsInput('getMentions')
+  $('.mentions').mentionsInput({
+            source: <%- JSON.stringify(mentions) %>, 
+            showAtCaret: true,
+       
+        delay: 0,
+        trigger: '@',
+        autoFocus: true
+      
+});
+
+});
+
+
+
+
+
+
+          function newService(id){
+
+          //  $('#pills-service-tab').tab('show');
+          $(`[name="ref_patrimonio"] option[value="${id}"]`).prop('selected', true)
+          
+
+          $(`body .patrimonio_ref`).text($('[name="ref_patrimonio"] option:selected').text())
+       
+          $('html, body').animate({
+                    scrollTop: $('[name="ref_patrimonio"]').offset().top
+                }, 0);
+
+            $('[data-plugin="select_service"]').select2('open');
+
+          
+
+          }
+
+
+function waranty(start){
+  
+    
+
+                    if( moment().diff(start, 'days') >= 365){
+                         return `<label class="badge badge-soft-danger">Sem Garantia</label>`
+                    }else{
+                         return `<label class="badge badge-soft-success">Equipamento em Garantia</label>`
+                    }
+
+}
+
+function list_service(services){
+
+  if(services){
+
+    var tpl ='<h6 class="fs-13 mt-0 mb-1 mt-2">INFORMAÇÕES SOBRE:</h6>'
+
+    services.forEach(function(item, index) {
+
+      tpl += `<div style="display: flow-root;" class="mb-1">
+        
+                          `
+  
+     tpl += `<p class="text-muted fs-13 m-0"><span class="badge bg-secondary" style="vertical-align: text-top;"><i class="uil uil-info-circle"></i> ${item.tecnico_name}</span> ${moment(item.service_created).format('DD/MM/YYYY HH:mm')} - ${item.service}</p> `
+     if(item.description){
+      tpl +=`<p class="text-muted fs-12 m-0 mb-1"><strong>OBSERVAÇÃO: </strong>${item.description}</p>`
+     }
+
+     tpl += `</div>`
+    })
+
+    return tpl
+
+
+  }else{
+    return ""
+  }
+
+ 
+
+
+
+
+
+}
+
+function remove_service(services){
+
+if(services){
+
+  var tpl ='<h6 class="m-2 fs-13 mt-0 mb-1 mt-2">REMOVER INFORMAÇÕES.</h6>'
+
+  services.forEach(function(item, index) {
+  
+   tpl += `
+   <a href="javascript:void(0);" onclick="deleteService('${item.id}', '<%- data.task_id %>')" class="dropdown-item text-danger">
+                                                    <i class="uil uil-trash me-2"></i>${moment(item.created).format('DD/MM/YYYY')} - ${item.service} </a>`
+
+  })
+
+  return tpl
+
+
+}else{
+  return ""
+}
+
+
+
+
+
+
+
+}
+
+function serviceButtom(registration){
+if(`<%-data.status%>` != 'complete' &&  `<%-data.status%>` != 'archive' && `<%-data.status%>` != 'new')  return `<button onclick="newService('${registration}')" class="btn btn-sm btn-primary float-end" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasTop">+ Serviço</button>`
+return ``
+}
+
+    
+
+
+      var table_ = $('#patrimonio_vinculado').DataTable({
+        ajax: "/api/tasks/patrimonio/<%- data.task_id %>",
+        responsive: true,
+        ordering: false,
+        searching: false,
+        language: {
+        emptyTable: "Nenhum patrimônio vinculado."
+    },
+        paging: false,
+        bInfo: false,
+        'columnDefs': [
+            {
+                "targets": 0,
+                "orderable": false,
+                'checkboxes': {
+                    'selectRow': true
+                }
+ 
+            },
+        ],'select': {
+            'style': 'multi'
+        },
+        columns: [{
+           "className": "text-center" ,
+            "data": "registration",
+            render: function(data, type, row) {
+              return `<h6 class="fs-16 mt-0 mb-1">${row.registration}</h6><label class="badge badge-soft-primary">${row.situacao}</label>`;
+            }
+          },
+          {
+            "data": "name",
+            render: function(data, type, row) {
+              return `
+                          
+                                          
+                                       
+                            <h6 class="fs-15 mt-0 mb-1">${row.name} ${waranty(row.data_aquisicao)}</h6>
+                            <p class="text-muted fs-12 mb-0"><b>LOCAL:</b> ${row.centro_custo}</p>
+                            <p class="text-muted fs-12 mb-0"><b>SECRETARIA:</b> ${row.orgao}</p>
+                            <p class="text-muted fs-12 mb-0"><b>RESPONSÁVEL:</b> ${row.responsavel}</p>
+
+                            ${list_service(row.services)}
+
+                           
+                       
+                            `;
+
+            }
+          },{
+           "className": "text-center" ,
+            "data": "id",
+            render: function(data, type, row) {
+              return `<input style="width: 23px;height: 25px" class="item" type="checkbox" value="${row.id}" name="patrimonioID[]" ${(row.id == 34720 || row.id == 34776) ? '' : 'checked'}>`;
+            }
+          }
+        ],
+
+    fnRowCallback: function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) { 
+
+      
+    $('[name=ref_patrimonio]').append($('<option>', { 
+        value: aData.registration,
+        text : `${aData.registration} - ${aData.name}` 
+    }));
+
+
+
+        }
+      });
+
+      table_.on( 'preDraw', function () {
+              $("[name=ref_patrimonio] option").remove();
+
+      $('[name=ref_patrimonio]').append($('<option>', { 
+        value: '',
+        text : "Não" 
+      }));
+
+
+    
+} );
+
+
+      /**/
+
+
+
+      $(document).on('select2:open', () => {
+        document.querySelector('.select2-search__field').focus();
+       // console.log('asdasokd')
+      });
+
+
+      $('.created_time').text(moment($('.created_time').text()).format('D [de] MMMM [de] YYYY'))
+      
+
+
+
+        function formatRepoService(data) {
+
+          console.log(data)
+
+          //console.log(data)
+          if (data.loading) {
+            return data.text;
+          }
+
+  //        $("#destiny").text(data.location)
+            $("#service").val(data.phone)
+
+          var $tpl = $(`
+              <div class="p-1">
+                  <h5 class="mt-1 mb-1"><span class="text-dark bold repository__name">${data.id} - ${data.name}</span>
+                  </div>
+          `)
+
+
+
+          return $tpl;
+          }
+
+      /*PATRIMONIO*/
+     
+
+      $('[data-plugin="select_patrimonio"]').select2({
+          ajax: {
+            url: '/api/patrimonio/search?',
+            dataType: 'json',
+            type: "GET",
+            allowClear: true,
+            placeholder: "Busque pela Placa do Patrimônio ...",
+            minimumInputLength: 3,
+            processResults: function(data) {
+              return {
+                results: data
+              };
+            },
+          },
+          templateResult: formatRepo,
+          templateSelection: function(data) {
+            if (!data.id) {
+              return data.text;
+            }
+            return $(`<span>${data.registration} - ${data.name}</span>`);
+          },
+        })
+
+        .on('select2:open', function(e) {
+          //document.querySelector('.select2-search__field').focus();
+        })
+
+
+
+
+      function TplHistory(data){
+        $(".history li").remove()
+          data.forEach(function(item, index) {
+            
+            $(".history").append(
+              `   <li class="event-list">
+                          <div class="pb-4">
+                            <div class="d-flex">
+                              <div class="event-date text-center me-4 flex-shrink-0">
+                                <div class="bg-soft-primary p-1 rounded text-primary fs-14 created" time="${item.created}"></div>
+                              </div>
+                              <div class="flex-grow-1">
+                                <h6 class="fs-15 mt-0 mb-1">
+                                  ${item.title}
+                                </h6>
+                                <p class="text-muted fs-14">
+                                  ${item.description}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </li>`
+            );
+          });
+
+}
+
+
+      
+        function checkCreate(message, url){
+
+bootbox.confirm({
+  message: message,
+  buttons: {
+      confirm: {
+          label: 'Sim',
+          className: 'btn-success'
+      },
+      cancel: {
+          label: 'Não, não tenho certeza.',
+          className: 'btn-danger'
+      }
+  },
+  callback: function (result) {
+
+      if(result){
+        // criar o laudo
+
+        var patrimonios = []
+        $(".item:checked").each(function(){
+          patrimonios.push($(this).val());
+        });
+
+       // [ "34707", "34708" ]
+
+       var data = {
+          task_id: '<%- data.task_id %>',
+          itens : patrimonios,
+          description: $('#description').val(),
+          description_end: $('#descriptionend').val(),
+          tipo: $('.tipo').val().toUpperCase()
+        }
+
+        $.ajax({
+          type: "POST",
+          url: `/tasks/oficio`,
+          dataType: "json",
+          contentType: "application/json; charset=utf-8",
+          data: JSON.stringify(data),
+          success: function(response) {
+           // $('#patrimonio_vinculado').DataTable().ajax.reload();
+           // HistoryLoad('<%- data.task_id %>')
+           window.location.href = "/tasks/oficio-view/" + response.id;
+            //Se a solicitação for feita com sucesso, a resposta representará os dados
+
+          },
+          error: function(errMsg) {
+            alert(errMsg);
+          }
+
+
+        })
+
+
+
+
+
+      }
+  }
+});
+
+
+}
+
+
+    </script>
+
+    <script>
+
+      function gettings(string){
+        var id = string.split(" ")[0].substr(-1)
+        console.log(id.toLowerCase())
+        if(id.toLowerCase() == 'a'){
+          return `Prezada Senhora, ` 
+        }else{
+          return `Prezado Senhor, ` 
+        }
+      }
+
+      function gettings2(string){
+        var id = string.split(" ")[0].substr(-1)
+        console.log(id.toLowerCase())
+        if(id.toLowerCase() == 'a'){
+          return `a ` 
+        }else{
+          return `o ` 
+        }
+      }
+
+function titleCase(str) {
+   var splitStr = str.toLowerCase().split(' ');
+   for (var i = 0; i < splitStr.length; i++) {
+       // You do not need to check if i is larger than splitStr length, as your for does that for you
+       // Assign it back to the array
+       splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);     
+   }
+   // Directly return the joined string
+   return splitStr.join(' '); 
+
+}
+
+var SolicitanteName = '<%-data.name%>'
+var SolicitanteSecretaria = '<%-data.location%>'
+
+
+
+      var template = {
+        garantia : `${gettings(SolicitanteName)} ${titleCase(SolicitanteName)}
+
+              Após realizar análise técnica minuciosa, identificamos que os itens abaixo apresentaram inconformidades e, portanto, necessitam ser encaminhados para o processo de garantia. É fundamental que sejam tomadas as devidas providências a fim de assegurar a resolução dessas questões de forma eficiente e dentro dos parâmetros estabelecidos.`,
+      baixa : `${gettings(SolicitanteName)} ${titleCase(SolicitanteName)}
+
+              Após realizar uma análise técnica minuciosa, identificamos que os itens abaixo apresentaram inconformidades e, portanto, necessitam ser baixados do inventário. É fundamental que sejam tomadas as devidas providências a fim de assegurar a correta baixa desses equipamentos, garantindo a conformidade com os procedimentos estabelecidos.
+
+Solicitamos, portanto, que sejam realizados todos os trâmites necessários para efetuar a baixa dos equipamentos, incluindo o preenchimento dos formulários pertinentes e a comunicação adequada aos departamentos responsáveis. Essa ação é essencial para manter a integridade do inventário e a precisão dos registros.`,
+      conformidade: `${gettings(SolicitanteName)} ${titleCase(SolicitanteName)}
+      
+              Após realizar uma análise técnica detalhada, temos o prazer de informar que os itens abaixo foram minuciosamente examinados e estão em plena conformidade com os padrões e especificações estabelecidos. Essa verificação abrangeu todos os aspectos relevantes, garantindo que os equipamentos atendam aos requisitos de qualidade, segurança e desempenho exigidos.`,
+conslusao : `O CPD (centro de Processamento de dados) está empenhado em garantir a sua plena satisfação e resolução dessas questões, e permanecemos à disposição d${gettings2(SolicitanteSecretaria)} ${titleCase(SolicitanteSecretaria)} para qualquer suporte adicional necessário.
+Agradecemos pela compreensão e colaboração até o momento.`
+}
+      $('#description').val(template.garantia)
+      $('#descriptionend').val(template.conslusao)
+      
+
+      $('.tipo').on('change', function() {
+        //alert( this.value );
+
+        if(this.value == 'garantia'){
+          $('#description').val(template.garantia)
+        }else if(this.value == 'baixa'){
+          $('#description').val(template.baixa)
+        }else if(this.value == 'conformidade'){
+          $('#description').val(template.conformidade)
+        }
+
+      });
+
+    </script>
+
+
+</body>
+<!-- END: Body-->
+
+</html>

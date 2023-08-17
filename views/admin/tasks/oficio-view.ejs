@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+
+<html lang="pt-br" data-textdirection="ltr">
+<%- include("../partials/header") %>
+
+<!-- BEGIN: Body-->
+<style>
+    .only-print{
+      display: none;
+    }
+
+  @media print {
+
+    .only-print{
+      display: block;
+    }
+
+    body{
+      background-color: #fff;
+      color: #000 !important;
+    }
+    .select2 , .tasks_notes{
+      display: none !important
+    }
+
+    [data-bs-target="#offcanvasRight"]{
+      display: none !important
+
+    }
+    body{
+      margin-left: 0px;
+    }
+
+    .noprint{
+      display: none !important;
+    }
+
+    .border-right{
+      border-right: 1px solid #ebeef5 !important;
+    }
+    hr:not([size]) {
+    height: 1px;
+    }
+
+  
+
+    .table > :not(:last-child) > :last-child > * {
+    border-bottom-color: #2b2b2b;
+}
+
+tbody, td, tfoot, th, thead, tr {
+    border-color: inherit;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #fff;
+    border-bottom: 1px solid #2b2b2b !important;
+    border-radius: 47px;
+}
+
+    hr {
+    margin: 1.5rem 0;
+    height: 10px;
+    border-bottom: 1px solid #000 !important;
+    
+    color: #000 !important;
+    background-color: #fff;
+    border: 0;
+    opacity: 1;
+}
+    [data-bs-target="#offcanvasRight"]{
+      display: none !important
+
+    }
+    body{
+      margin-left: 0px;
+    }
+
+
+
+  }
+
+  .offcanvas-end{
+
+    width: 40vw;
+  }
+
+  div#offcanvasBottom{
+  height: 50vh;
+ }
+ .message{
+  padding: 2.5rem 3rem  !important
+ }
+  
+</style>
+
+<body data-sidebar-size="default" data-layout-width="fluid" data-layout-menu-position="fixed" data-sidebar-color="light" data-sidebar-showuser="false" data-topbar-color="light">
+  <!-- Begin page -->
+  <div id="wrapper">
+
+    <%- include("../partials/nav") %>
+    <%- include("../partials/menu") %>
+
+      
+    <!-- ============================================================== -->
+    <!-- Start Page Content here -->
+    <!-- ============================================================== -->
+    <div class="content-page">
+      <div class="content">
+     
+                 
+        <!-- Start Content-->
+        <div class="container-fluid" >
+
+          <!-- start page title -->
+          <div class="row">
+            <div class="col-12">
+              <div class="page-title-box">
+                <h4 class="page-title">Laudo #<%- oficio.id %>
+                </h4>
+                <div class="page-title-right">
+                  <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Laudos</a></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- end page title -->
+
+          <div class="row" >
+            <div class="col-xl-8">
+              <div class="card">
+
+                <div class="card-body">
+                  <div class="pdf" id="content" style="
+                  margin: 0;
+                  padding: 0;
+              ">
+
+                                    
+                      <%-include('../partials/components/header-cpd.ejs') %> 
+                      <hr class="mt-2 mb-2">
+                      <div class="row">
+                   
+
+                        <div class="col-sm-12">
+                          <h5 class="text-dark fs-20 mb-2 text-center">
+                            LAUDO TÉCNICO <%-oficio.tipo%>
+                        
+                   
+                          </h5>
+
+                          <span class="float-start fs-15 mt-1 mb-1">
+                          <b>Laudo Técnico <%- (oficio.number < 10 ? '0' : '') + oficio.number %>/<%-oficio.year%></b><br>
+                          Centro de Processamento de Dados – CPD<br>
+                          <b>Assunto:</b> Solicitação de verificação e laudo técnico <b>Ref: Tarefa #<%-data.task_id-%></b>.
+                          </span>
+                          </div>
+                          <div class="col-sm-12">
+                          <span class="float-start fs-15 mt-2 mb-1">
+                            <b>Para:</b> <%-data.name%><br>
+                            <b>Secretaria:</b><%-data.secretaria%><br>
+                            <b>Setor:</b> <%-data.location%><br>
+                          </span>
+                          </div>
+
+                         
+                        <div class="col-sm-12 ">
+                        
+                            <span class="float-end fs-15 mb-1" >Lagoa da Prata, <span class="created_time"><%-oficio.created%></span></span>
+  
+                            <span class="float-start fs-14 mt-2 mb-1" style="text-align: justify;">
+                            <%-oficio.description.replace(/\n/g, '<br/>');%>
+                            </span>
+                        </div>
+
+
+                     
+                        </div>
+                      
+                      
+              
+                    
+                
+                      <div class="row">
+                        <div class="col-12">
+
+
+
+                          <table id="patrimonio_vinculado" class="table table-centered">
+                            <thead>
+                              <tr>
+                               
+                                
+                                <th class="fs-13">DESCRIÇÃO</th>
+                                <th class="fs-13">INFORMAÇÕES</th>
+                                
+                                <!-- <th style="width: 10%">Hours</th>
+                                                                    <th style="width: 10%">Hours Rate</th>
+                                                                    <th style="width: 10%" class="text-end">Total</th>-->
+                              </tr>
+                            </thead>
+
+
+
+                            
+                          </table>
+
+                          <span class="float-start fs-14 mb-1" style="text-align: justify;">
+                            <%-oficio.description_end%>
+                            </span>
+
+                        </div> <!-- end col -->
+                      </div>
+                      <!-- end row -->
+
+                      <div class="row">
+                        <div class="col-md-6 mt-4">
+                    
+
+                            <span class="fs-13 mt-4 mb-1">
+                            _______________________________________________<br>
+                            <%-user.fullName%><br>
+                            <%-user.function%>
+                              
+                            </span>
+                           
+
+                        </div> <!-- end col -->
+                   
+                       <!-- <div class="col-md-6 mt-4">
+                    
+
+                          <span class="fs-13 mt-4 mb-1">
+                          _______________________________________________<br>
+                          <%-data.name%><br>
+                          <%-data.location%>
+                            
+                          </span>
+                         
+
+                      </div> -->
+                 
+
+
+
+                      </div>
+
+                     
+
+                      <div class="mt-3 mb-1">
+                        <div class="text-end d-print-none">
+                          <a href="/tasks/view/<%-data.task_id-%>" class="float-start btn btn-soft-dark">Voltar para Tarefa</a>
+                          <button class="btn btn-secondary" type="button" onclick="printPDF()">Imprimir ou Salvar PDF</button>
+                            
+                           
+                  
+
+                        </div>
+                      </div>
+
+
+          
+
+         
+
+
+             
+            </div> <!-- end col -->
+
+          </div>
+          </div>
+          <!-- end row -->
+
+        </div> <!-- container -->
+
+     
+
+    
+
+    </div>
+   
+   
+ 
+
+    <%- include('../partials/footer') %>
+    <script src='/js/jquery-ui.js' type='text/javascript'></script>
+    <script src='/js/jquery.mentions.js' type='text/javascript'></script>
+    <link href="/css/ui.css" rel="stylesheet" type="text/css" id="app-default-stylesheet">
+    <script src="/js/jquery.dataTables.min.js"></script>
+    <script src="/js/jquery.migrate.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+   
+
+    
+
+
+   
+   
+    <script>
+
+
+function printPDF() {
+  window.print()
+
+}
+/*
+var doc = new jsPDF();
+    doc.addHTML($('#content')[0], 15, 15, {
+      'background': '#fff',
+    }, function() {
+      doc.save('sample-file.pdf');
+    });
+  
+
+  }
+*/
+
+function waranty(start){
+  
+    
+
+                    if( moment().diff(start, 'days') >= 365){
+                         return `<label class="badge badge-soft-danger">Sem Garantia</label>`
+                    }else{
+                         return `<label class="badge badge-soft-success">Equipamento em Garantia</label>`
+                    }
+
+}
+
+function list_service(services){
+
+  if(services){
+
+    var tpl ='<h6 class="fs-13 mt-0 mb-1 mt-2">INFORMAÇÕES SOBRE:</h6>'
+
+    services.forEach(function(item, index) {
+
+      tpl += `<div style="display: flow-root;" class="mb-1">
+        
+                          `
+  
+     tpl += `<p class="text-muted fs-13 m-0"><span class="badge bg-secondary" style="vertical-align: text-top;"><i class="uil uil-info-circle"></i> ${item.tecnico_name}</span> ${moment(item.service_created).format('DD/MM/YYYY HH:mm')} - ${item.service}</p> `
+     if(item.description){
+      tpl +=`<p class="text-muted fs-12 m-0 mb-1"><strong>OBSERVAÇÃO: </strong>${item.description}</p>`
+     }
+
+     tpl += `</div>`
+    })
+
+    return tpl
+
+
+  }else{
+    return ""
+  }
+
+ 
+
+
+
+
+
+}
+
+
+function serviceButtom(registration){
+if(`<%-data.status%>` != 'complete' &&  `<%-data.status%>` != 'archive' && `<%-data.status%>` != 'new')  return `<button onclick="newService('${registration}')" class="btn btn-sm btn-primary float-end" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasTop">+ Serviço</button>`
+return ``
+}
+
+      var table_ = $('#patrimonio_vinculado').DataTable({
+        ajax: "/api/tasks/patrimonioOficio/<%- oficio.id %>",
+        responsive: true,
+        ordering: false,
+        searching: false,
+        language: {
+        emptyTable: "Nenhum patrimônio vinculado."
+    },
+        paging: false,
+        bInfo: false,
+        columns: [
+          {
+            "data": "name",
+            render: function(data, type, row) {
+              return `
+                          
+                                          
+                                       
+                            <h6 class="fs-15 mt-0 mb-1">${row.registration} - ${row.name}</h6>
+                            <p class="text-muted fs-12 mb-0"><b>LOCAL:</b> ${row.centro_custo}</p>
+                            <p class="text-muted fs-12 mb-0"><b>SECRETARIA:</b> ${row.orgao}</p>
+                            <p class="text-muted fs-12 mb-0"><b>RESPONSÁVEL:</b> ${row.responsavel}</p>
+
+                        
+
+                           
+                       
+                            `;
+
+            }
+          },
+          {
+            "data": "name",
+            render: function(data, type, row) {
+              return `
+                          
+                                          
+                         
+
+                            ${list_service(row.services)}
+
+                           
+                       
+                            `;
+
+            }
+          }
+        ],
+
+    fnRowCallback: function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) { 
+
+      
+    $('[name=ref_patrimonio]').append($('<option>', { 
+        value: aData.registration,
+        text : `${aData.registration} - ${aData.name}` 
+    }));
+
+
+
+        }
+      });
+
+      table_.on( 'preDraw', function () {
+              $("[name=ref_patrimonio] option").remove();
+
+      $('[name=ref_patrimonio]').append($('<option>', { 
+        value: '',
+        text : "Não" 
+      }));
+
+
+    
+} );
+
+
+      /**/
+
+
+
+      $(document).on('select2:open', () => {
+        document.querySelector('.select2-search__field').focus();
+       // console.log('asdasokd')
+      });
+
+
+
+      $('.created_time').text(moment($('.created_time').text()).format('D [de] MMMM [de] YYYY'))
+      
+
+
+        function checkCreate(message, url){
+
+bootbox.confirm({
+  message: message,
+  buttons: {
+      confirm: {
+          label: 'Sim',
+          className: 'btn-success'
+      },
+      cancel: {
+          label: 'Não, não tenho certeza.',
+          className: 'btn-danger'
+      }
+  },
+  callback: function (result) {
+
+      if(result){
+        // criar o laudo
+
+        var patrimonios = []
+        $(".item:checked").each(function(){
+          patrimonios.push($(this).val());
+        });
+
+       // [ "34707", "34708" ]
+
+       var data = {
+          task_id: '<%- data.task_id %>',
+          itens : patrimonios,
+          description: $('#description').val(),
+          description_end: $('#descriptionend').val(),
+          tipo: $('.tipo').val().toUpperCase()
+        }
+
+        $.ajax({
+          type: "POST",
+          url: `/tasks/oficio`,
+          dataType: "json",
+          contentType: "application/json; charset=utf-8",
+          data: JSON.stringify(data),
+          success: function(response) {
+           // $('#patrimonio_vinculado').DataTable().ajax.reload();
+           // HistoryLoad('<%- data.task_id %>')
+
+            //Se a solicitação for feita com sucesso, a resposta representará os dados
+
+          },
+          error: function(errMsg) {
+           // alert(errMsg);
+          }
+
+
+        })
+
+
+
+
+
+      }
+  }
+});
+
+
+}
+
+
+    </script>
+
+
+</body>
+<!-- END: Body-->
+
+</html>
