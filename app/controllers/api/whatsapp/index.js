@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const moment = require('moment')
 var db = require('../../../config/db')
+var request = require('request');
+
+
 
 
 var pool = require("../../../config/pool-factory");
@@ -9,7 +12,7 @@ var pool = require("../../../config/pool-factory");
 // Estrutura /API/Tasks
 
 //whatsapp
-var client = require("../../../config/wpp");
+/*var client = require("../../../config/wpp");*/
 const { sendMsg }  = require('../../../config/senderHelper')
 
 router.post('/check', async function (req, res) {
@@ -17,26 +20,58 @@ router.post('/check', async function (req, res) {
   const body = req.body
   const number = body.number.toString().replace(/\D/g, "")
 
- const [result] = await client.onWhatsApp("55" + number);
-
-  if (typeof result !== 'undefined') {
-   console.log(result);
-
-   return res.status(200).json({
-    status: result,
-    message: "Numero tem Whatsapp",
-  });
-
- }else{
-  console.log('algum erro ocorreu ao buscar 55' + number)
-  console.log(result)
-  return res.status(200).json({
-    status: {
-      exists : false
+  var options = {
+    'method': 'POST',
+    'url': `${process.env.API_EVOLUTION_URL}/chat/whatsappNumbers/${process.env.SESSION_NAME}`,
+    'headers': {
+      'Content-Type': 'application/json',
+      'apikey': `${process.env.SESSION_API_KEY}`
     },
-    message: "Não existe",
+    body: JSON.stringify({
+      "numbers": [
+        `55${number}`
+      ]
+    })
+  
+  };
+  console.log(options)
+ 
+  request(options, function (error, response) {
+    if (error) throw new Error(error);
+    //console.log(response.body);
+    //data = JSON.stringify(response.body)
+    var jsonObject = JSON.parse(response.body);
+    
+    if (jsonObject[0]?.exists ==  true) {
+
+      return res.status(200).json({
+       status: jsonObject[0]?.exists,
+       jid: body.number.toString().replace(/\D/g, ""),
+       message: "Numero tem Whatsapp",
+     });
+   
+    }else{
+     console.log('algum erro ocorreu ao buscar 55' + number)
+     
+     return res.status(200).json({
+       status: {
+         exists : false
+       },
+       message: "Não existe",
+     });
+    }
+
+
+
   });
- }
+
+
+
+
+
+ //const [result] = await client.onWhatsApp("55" + number);
+
+
 
 })
 

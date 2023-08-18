@@ -4,6 +4,7 @@ const path = require("path");
 const fs = require("fs");
 const config = require('../../../config.json')
 const { createPDF } = require('../../config/pdf')
+var request = require('request');
 
 var pool = require("../../config/pool-factory");
 var {
@@ -74,21 +75,37 @@ async function lembrete() {
                 \n*Providencie a retirada o mais breve possivel.*
                 \n\n_👉Mensagem automática, não é necessario responder._
                 `
-
-                   
+  
        
-           console.log(message)
-                       
-            await sendMsg(
-              {
-                type: "text",
-                message: message,
-                from: task.whatsapp,
-              },
-              client
-            );
+           console.log("MENSAGEM EM FILA NA API")
 
-            
+       
+            var options = {
+              'method': 'POST',
+              'url': `${process.env.API_EVOLUTION_URL}/message/sendText/${process.env.SESSION_NAME}`,
+              'headers': {
+                'Content-Type': 'application/json',
+                'apikey': `${process.env.SESSION_API_KEY}`
+              },
+              body: JSON.stringify({
+                "number": task.whatsapp,
+                "options": {
+                  "delay": 1200,
+                  "presence": "composing",
+                  "linkPreview": false
+                },
+                "textMessage": {
+                  "text": message
+                }
+              })
+
+            };
+            request(options, function (error, response) {
+              if (error) throw new Error(error);
+              console.log(response.body);
+            });
+
+                               
 
             await db.updateTaskDate(
               task.task_id,
@@ -265,7 +282,7 @@ router.post("/create", isLoggedIn, async function (req, res) {
     id_servidor: dados.servidor,
     location: dados.destiny,
     contato: dados.contato,
-    whatsapp: dados.whatsapp,
+    whatsapp: "55" + dados.whatsapp,
     notification: dados.notify ? dados.notify : "off",
     description: dados.problem,
     priority: dados.priority,
@@ -288,12 +305,13 @@ router.post("/create", isLoggedIn, async function (req, res) {
       if (err) console.log(err);
 
       const data = await db.getTaskData(task_id);
+      console.log(data)
       var solicitante = data[0].name.toString().split(" ");
      
       if (dados.notify == 'on') {
         try {
 
-          let message = await client.sendMessage(data[0].whatsapp, { text: `Oi 👋 *${capitalizeFirstLetter(
+          let message =  `Oi 👋 *${capitalizeFirstLetter(
             solicitante[0].toLowerCase()
           )}* tudo bem ? \nAqui é do CPD da Prefeitura.
           \nFoi gerada uma nova tarefa *#${task_id}* para ${(dados.tipo == 'in') ? `*Manutenção de Equimanetos*` :` *Auxilio ao Usuário*`}.
@@ -301,9 +319,39 @@ router.post("/create", isLoggedIn, async function (req, res) {
           \n_${dados.problem}_
           \n☝️ Fique atento pois as notificações desta tarefa vão chegar por aqui.
           \n_👉Mensagem automática, não é necessario responder._
-          ` })
+          `
           
           console.log(message)
+
+
+          var options = {
+            'method': 'POST',
+            'url': `${process.env.API_EVOLUTION_URL}/message/sendText/${process.env.SESSION_NAME}`,
+            'headers': {
+              'Content-Type': 'application/json',
+              'apikey': `${process.env.SESSION_API_KEY}`
+            },
+            body: JSON.stringify({
+              "number": data[0].whatsapp,
+              "options": {
+                "delay": 1200,
+                "presence": "composing",
+                "linkPreview": false
+              },
+              "textMessage": {
+                "text": message
+              }
+            })
+
+          };
+          request(options, function (error, response) {
+            if (error) throw new Error(error);
+            console.log(response.body);
+          });
+
+
+
+
 
         } catch (error) {console.log("erro ao enviar")}
       }

@@ -36,13 +36,12 @@ const sendMessage = async (data) => {
     });
     let respData = await response.json(); //extract JSON from the http response
 
-    console.log(respData)
+   
   if(respData){
-
   
-    if (respData.status.exists == true) {
+    if (respData.status == true) {
       $(".input-group-text").text("✔️");
-      $("#whatsapp").val(respData.status.jid)
+      $("#whatsapp").val(respData.jid)
     } else {
       $(".input-group-text").text("🗙");
       $("#whatsapp").val()
