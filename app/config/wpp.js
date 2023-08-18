@@ -127,7 +127,7 @@ const {
 }
 
 
-startSock()
+//startSock()
 
 async function list(){
 
