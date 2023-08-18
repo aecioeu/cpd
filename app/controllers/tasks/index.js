@@ -314,7 +314,7 @@ router.post("/create", isLoggedIn, async function (req, res) {
           let message =  `Oi 👋 *${capitalizeFirstLetter(
             solicitante[0].toLowerCase()
           )}* tudo bem ? \nAqui é do CPD da Prefeitura.
-          \nFoi gerada uma nova tarefa *#${task_id}* para ${(dados.tipo == 'in') ? `*Manutenção de Equimanetos*` :` *Auxilio ao Usuário*`}.
+          \nFoi gerada uma nova tarefa *#${task_id}* para ${(dados.tipo == 'in') ? `*Manutenção de Equipamentos*` :` *Auxilio ao Usuário*`}.
           \nProblema relatado:
           \n_${dados.problem}_
           \n☝️ Fique atento pois as notificações desta tarefa vão chegar por aqui.
