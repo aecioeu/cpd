@@ -228,7 +228,7 @@ const tecnicos = await db.getActiveTecnicos()
 //var totalPeriod = tecs.reduce((n, {Atendimentos}) => n + Atendimentos, 0)
 
 for (const tecnico of tecnicos) {
-  var atendimentos = 0 //await db.getTecnicoStatsById(tecnico.uid, "2023-05-01T03:00:00.000Z", "2023-05-03T03:00:00.000Z")
+  var atendimentos = await db.getTecnicoStatsById(tecnico.uid, "2023-05-01T03:00:00.000Z", "2023-05-03T03:00:00.000Z")
   tecAtendimentos.push({
     "id": tecnico.uid,
     "name": tecnico.value,
@@ -238,7 +238,7 @@ for (const tecnico of tecnicos) {
   console.log(contents);*/
 }
 
-console.log(tecAtendimentos)
+
 
 //20: 40*100 =
 /*

@@ -592,7 +592,7 @@ Order By
 
 const getTecnicoStatsById = async (id, star, end) => {
 
-  let rows = await pool.query(`Select
+  let rows = pool.query(`Select
   task_tecnico.id_tecnico,
   IFNULL(Count(task_tecnico.id),0) As Atendimentos,
   task_tecnico.name
