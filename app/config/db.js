@@ -602,7 +602,7 @@ Where
   task_tecnico.id_tecnico = ? And
   task_tecnico.created Between ? And ?
 Group By
-  task_tecnico.id_tecnico`, 
+  task_tecnico.id_tecnico, task_tecnico.name`, 
   [id, star, end]);
  
   if (rows.length > 0) return rows
