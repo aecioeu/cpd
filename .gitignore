@@ -1,5 +1,5 @@
 /node_modules
-/sessions
+/sessions/
 /app/data
 /package-lock.json
 /.env

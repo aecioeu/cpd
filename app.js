@@ -16,7 +16,7 @@ const flash = require('connect-flash');
 
 var FileStore = require('session-file-store')(session);
 var fileStoreOptions = {
-  path : '../volumes/cpd'
+  path : './sessions'
 
 };
 
