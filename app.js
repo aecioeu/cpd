@@ -15,7 +15,10 @@ const flash = require('connect-flash');
 
 
 var FileStore = require('session-file-store')(session);
-var fileStoreOptions = {};
+var fileStoreOptions = {
+  path : '../volumes/cpd'
+
+};
 
 const app = express();
 const port = process.env.PORT || 80;

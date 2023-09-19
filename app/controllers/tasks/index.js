@@ -20,7 +20,7 @@ var moment = require("moment"); // require
 const { isLoggedIn } = require("../../config/functions");
 
 //whatsapp client
-const client = require("../../config/wpp");
+
 const { sendMsg } = require("../../config/senderHelper");
 
 //AGENDAMENTOS
@@ -133,12 +133,17 @@ async function lembrete() {
 */
 var cron = require("node-cron");
 
+if(process.env.PRODUCTION == true){
+  console.log('ENVIANDO MSNGENS')
+
 lembrete()
 cron.schedule("0 8,10,12,14 * * 1,2,3,4,5", async () => {
 
 //cron.schedule("0 8,10,12,14 * * 1,2,3,4,5", async () => {
     lembrete();
 });
+
+}
 
 // Estrutura /TASKS
 
