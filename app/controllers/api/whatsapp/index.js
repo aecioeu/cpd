@@ -25,7 +25,7 @@ router.post('/check', async function (req, res) {
     'url': `${process.env.API_EVOLUTION_URL}/chat/whatsappNumbers/${process.env.SESSION_NAME}`,
     'headers': {
       'Content-Type': 'application/json',
-      'apikey': `${process.env.SESSION_API_KEY}`
+      'apikey': `${process.env.GLOBAL_API_KEY}`
     },
     body: JSON.stringify({
       "numbers": [

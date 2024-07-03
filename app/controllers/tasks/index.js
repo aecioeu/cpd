@@ -85,7 +85,7 @@ async function lembrete() {
               'url': `${process.env.API_EVOLUTION_URL}/message/sendText/${process.env.SESSION_NAME}`,
               'headers': {
                 'Content-Type': 'application/json',
-                'apikey': `${process.env.SESSION_API_KEY}`
+                'apikey': `${process.env.GLOBAL_API_KEY}`
               },
               body: JSON.stringify({
                 "number": task.whatsapp,
@@ -334,7 +334,7 @@ router.post("/create", isLoggedIn, async function (req, res) {
             'url': `${process.env.API_EVOLUTION_URL}/message/sendText/${process.env.SESSION_NAME}`,
             'headers': {
               'Content-Type': 'application/json',
-              'apikey': `${process.env.SESSION_API_KEY}`
+              'apikey': `${process.env.GLOBAL_API_KEY}`
             },
             body: JSON.stringify({
               "number": data[0].whatsapp,
