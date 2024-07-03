@@ -40,7 +40,7 @@ router.post('/check', async function (req, res) {
     try {
       if (error) throw error;  
       const response = JSON.parse(r.body)
-      console.log(response[0]);
+      console.log(r, response);
       return res.status(200).json(response[0]);
 
     } catch (error) {
