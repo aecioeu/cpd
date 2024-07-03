@@ -36,34 +36,18 @@ router.post('/check', async function (req, res) {
   };
   console.log(options)
  
-  request(options, function (error, response) {
-    if (error) throw new Error(error);
-    //console.log(response.body);
-    //data = JSON.stringify(response.body)
-    var jsonObject = JSON.parse(response.body);
-    
-    if (jsonObject[0]?.exists ==  true) {
+  request(options, function (error, r) {
+    try {
+      if (error) throw error;  
+      const response = JSON.parse(r.body)
+      console.log(response[0]);
+      return res.status(200).json(response[0]);
 
-      return res.status(200).json({
-       status: jsonObject[0]?.exists,
-       jid: body.number.toString().replace(/\D/g, ""),
-       message: "Numero tem Whatsapp",
-     });
-   
-    }else{
-     console.log('algum erro ocorreu ao buscar 55' + number)
-     
-     return res.status(200).json({
-       status: {
-         exists : false
-       },
-       message: "Não existe",
-     });
+    } catch (error) {
+      console.error('Ocorreu um erro:', error.message);
     }
-
-
-
   });
+
 
 
 
