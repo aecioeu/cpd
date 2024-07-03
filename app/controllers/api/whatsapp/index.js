@@ -3,6 +3,7 @@ const router = express.Router();
 const moment = require('moment')
 var db = require('../../../config/db')
 var request = require('request');
+require('dotenv').config()
 
 
 
