@@ -1195,7 +1195,7 @@ function Tplnotes(data){
                                             <div class="conversation-text">
                                                 <div class="ctext-wrap">
                                                     <i class="fs-15">${notes.tecnico_name}</i>
-                                                    <p class="fs-14">${notes.description}</p>
+                                                    <p class="fs-14">${notes.description.replace(/\n/g, '<br>')}</p>
                                                 </div>
                                                 
                                                 

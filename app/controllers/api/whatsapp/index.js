@@ -5,15 +5,7 @@ var db = require('../../../config/db')
 var request = require('request');
 require('dotenv').config()
 
-
-
-
 var pool = require("../../../config/pool-factory");
-
-// Estrutura /API/Tasks
-
-//whatsapp
-/*var client = require("../../../config/wpp");*/
 const { sendMsg }  = require('../../../config/senderHelper')
 
 router.post('/check', async function (req, res) {
@@ -50,13 +42,7 @@ router.post('/check', async function (req, res) {
   });
 
 
-
-
-
-
- //const [result] = await client.onWhatsApp("55" + number);
-
-
+//const [result] = await client.onWhatsApp("55" + number);
 
 })
 

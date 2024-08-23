@@ -1,6 +1,3 @@
-
-
-
 const config = require("./config.json");
 
 // app.js
@@ -30,7 +27,7 @@ const socket = require("socket.io", {
   }
 });
 
-
+console.log(new Date().toString());
 const compression = require('compression')
 app.use(compression());
 app.disable('x-powered-by');

@@ -108,7 +108,7 @@ module.exports = function(app, passport) {
                                 if (err) {
                                     console.log(err.message)
                                 }
-                                 console.log(newUserMysql)
+                               //  console.log(newUserMysql)
                                 newUserMysql.id = rows.insertId;
                                 return done(null, newUserMysql);
                             });

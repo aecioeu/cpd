@@ -5,7 +5,6 @@ const fs = require("fs");
 const config = require('../../../config.json')
 const { createPDF } = require('../../config/pdf')
 var request = require('request');
-
 var pool = require("../../config/pool-factory");
 var {
   makeid,
@@ -14,17 +13,20 @@ var {
   capitalizeFirstLetter,
 } = require("../../config/functions");
 var db = require("../../config/db");
-
 var moment = require("moment"); // require
-
 const { isLoggedIn } = require("../../config/functions");
-
-//whatsapp client
-
 const { sendMsg } = require("../../config/senderHelper");
-
-//AGENDAMENTOS
 const schedule = require("node-schedule");
+
+
+var request = require('request');
+require('dotenv').config()
+
+
+
+
+
+
 
 async function lembrete() {
 //subtract(15, "days")
@@ -146,7 +148,6 @@ cron.schedule("0 8,10,12,14 * * 1,2,3,4,5", async () => {
 }
 
 // Estrutura /TASKS
-
 
 let { addUser, getUsersInRoom, getUser, removeUser} =  require('../../config/ioFunctions');
 //const { config } = require("process");
@@ -310,9 +311,9 @@ router.post("/create", isLoggedIn, async function (req, res) {
       if (err) console.log(err);
 
       const data = await db.getTaskData(task_id);
-      console.log(data)
       var solicitante = data[0].name.toString().split(" ");
      
+      // CASO SEJA SELECIONADA PARA NOTIFICAR OS USUARIOS
       if (dados.notify == 'on') {
         try {
 
@@ -326,39 +327,15 @@ router.post("/create", isLoggedIn, async function (req, res) {
           \n_👉Mensagem automática, não é necessario responder._
           `
           
-          console.log(message)
 
+          sendMsg({
+            type: "text",
+            message: message,
+            from: data[0].whatsapp,
+          }
+        )
 
-          var options = {
-            'method': 'POST',
-            'url': `${process.env.API_EVOLUTION_URL}/message/sendText/${process.env.SESSION_NAME}`,
-            'headers': {
-              'Content-Type': 'application/json',
-              'apikey': `${process.env.GLOBAL_API_KEY}`
-            },
-            body: JSON.stringify({
-              "number": data[0].whatsapp,
-              "options": {
-                "delay": 1200,
-                "presence": "composing",
-                "linkPreview": false
-              },
-              "textMessage": {
-                "text": message
-              }
-            })
-
-          };
-          request(options, function (error, response) {
-            if (error) throw new Error(error);
-            console.log(response.body);
-          });
-
-
-
-
-
-        } catch (error) {console.log("erro ao enviar")}
+        } catch (error) {console.log("ERRO AO ENVIAR MENSSAGEM PARA USUARIO.")}
       }
 
 
@@ -419,6 +396,8 @@ router.post("/edit", isLoggedIn, async function (req, res) {
     priority: dados.priority,
     type: dados.tipo,
   };
+
+ 
 
   if (dados.arquived == "on") {
     data.status = "pendding";

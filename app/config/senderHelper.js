@@ -1,13 +1,64 @@
-
-
 const { delay, rand, makeid } = require("./functions");
 const fs = require("fs");
+require('dotenv').config()
+var request = require('request');
 
 
-const sendMsg = async (payload, client) => {
+const senderMsg  = async(url, from, bodyMsg)=> {
+
+  var number = from.toString().replace(/\D/g, "")
+  var configMsg = {
+    "number": number,
+    "options": {
+      "delay": 1200,
+      "presence": "composing",
+      "linkPreview": false
+    },
+    ...bodyMsg
+  }
+
+  //console.log(configMsg)
+  
+  var options = {
+    'method': 'POST',
+    'url': url,
+    'headers': {
+      'Content-Type': 'application/json',
+      'apikey': `${process.env.GLOBAL_API_KEY}`
+    },
+    body: JSON.stringify(configMsg)
+  
+  };
+  request(options, function (error, response) {
+    if (error) throw new Error(error);
+    console.log(response.body);
+  });
+
+}
+
+const sendMsg = async (payload) => {
+  //console.log(payload)
+
+  switch (payload.type) {
+    case "text":
+      await senderMsg(`${process.env.API_EVOLUTION_URL}/message/sendText/${process.env.SESSION_NAME}`,
+       payload.from, 
+        { "textMessage": {
+            "text": payload.message
+          }
+        }
+      ) 
+      break;
+  }
+
+
+
+
+
+
 
     //payload.from = payload.from.toString().replace(/\D/g, "")
-    await client.presenceSubscribe(payload.from);
+    /*await client.presenceSubscribe(payload.from);
     await delay(rand(500));
   
     if (payload.type == "audio")
@@ -123,7 +174,7 @@ const sendMsg = async (payload, client) => {
   
         await client.sendMessage(payload.from, templateMessage);
         break;
-    }
+    }*/
   };
 
   

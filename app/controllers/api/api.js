@@ -6,10 +6,10 @@ var pool = require("../../config/pool-factory");
 
 // Estrutura /API
 
-router.get('/servidores', async function (req, res) { 
-  console.log('iniiando')
+router.get('/atualizar', async function (req, res) { 
+  console.log('Iniciando')
 
-  const servidores = require('../../data/servidores.json')
+  const servidores = require('../../../public/data/servidores.json')
   async function asyncForEach(array, callback) {
       for (let index = 0; index < array.length; index++) {
           await callback(array[index], index, array);
@@ -36,13 +36,13 @@ router.get('/servidores', async function (req, res) {
           //caso sim
           await pool.query("UPDATE servidores SET ?  WHERE registration = ?", [data, data.registration]);
          // atualizados.push(`AT Novo Servidor atualizado ${servidor.nomeServidor}`)
-          console.log(`AT Novo Servidor atualizado ${servidor.nomeServidor}`)
+         // console.log(`AT Novo Servidor atualizado ${servidor.nomeServidor}`)
 
         }else{
           //caso não
           pool.query("INSERT INTO servidores SET ?", data, function (err, result) {
            // novos.push(`NV Novo Servidor registrado ${servidor.nomeServidor}`)
-            console.log(`NV Novo Servidor registrado ${servidor.nomeServidor}`)
+          //  console.log(`NV Novo Servidor registrado ${servidor.nomeServidor}`)
             // console.log(err)
             // console.log(`${servidor.nomeServidor} registrado`)
            });
@@ -52,17 +52,17 @@ router.get('/servidores', async function (req, res) {
   
       })
 
-      console.log(novos, atualizados)
+      console.log("Finalizado : " , novos, atualizados)
 
-  res.json(novos, atualizados);
+  //res.json(novos, atualizados);
 })
 
 
 
 router.get('/patrimonio', async function (req, res) {
-  console.log('iniiando')
+  console.log('Iniciado')
 
-  const itens = require('../../data/patrimonio.json')
+  const itens = require('../../../public/data/patrimonio.json')
   async function asyncForEach(array, callback) {
       for (let index = 0; index < array.length; index++) {
           await callback(array[index], index, array);
@@ -100,7 +100,7 @@ router.get('/patrimonio', async function (req, res) {
           //caso sim
           await pool.query("UPDATE patrimonio SET ?  WHERE registration = ?", [data, data.registration]);
          // atualizados.push(`AT Novo Patrimonio atualizado ${data.name}`)
-         console.log(`${rows[0].id} - ${data.name} atualizado`)
+         //console.log(`${rows[0].id} - ${data.name} atualizado`)
 
         }else{
           //caso não
