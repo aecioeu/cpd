@@ -57,6 +57,8 @@ module.exports = function(app, passport) {
              store[0].mentions_count = 0
                     let mentions = await pool.query("SELECT * FROM notifications WHERE tecnico_id = ? AND status = 0 ORDER BY created DESC", [store[0].id]);
                  
+
+
                     if (mentions.length > 0) {
                         store[0].mentions = mentions
                         store[0].mentions_count = mentions.length
@@ -138,7 +140,7 @@ module.exports = function(app, passport) {
                     //console.log(username.match(/\d/g).join(""))
                     
                           
-                    rows[0].mentions = []
+                   rows[0].mentions = []
                     rows[0].mentions_count = 0
                     let mentions = await pool.query("SELECT * FROM notifications WHERE tecnico_id = ? AND status = 0 ORDER BY created DESC", [rows[0].id]);
                  

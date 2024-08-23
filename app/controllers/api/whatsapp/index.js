@@ -12,6 +12,7 @@ router.post('/check', async function (req, res) {
 
   const body = req.body
   const number = body.number.toString().replace(/\D/g, "")
+  console.log(number)
 
   var options = {
     'method': 'POST',

@@ -453,7 +453,7 @@ router.post("/edit", isLoggedIn, async function (req, res) {
 
 router.post("/note", isLoggedIn, async function (req, res) {
   const dados = req.body;
-let name = req.user.name
+  let name = req.user.name
 
   var data = {
     task_id: dados.task_id,
@@ -463,6 +463,9 @@ let name = req.user.name
   };
 
   var mentions = dados.mentions
+  console.log(dados)
+
+
   if(mentions.length > 0){
     //notificar em tempo real as pessoas envolvidas
     //inserir a notificação nos alertas da pagina
@@ -481,16 +484,15 @@ let name = req.user.name
           message : `${MenitonUser.name}, você foi mencionado por <b>${name}</b> na Tarefa <b>${dados.task_id}</b> 👇.<br>"<b>${dados.description}</b>"`,
           task_id : dados.task_id
         }
-        console.log(mention_data)
+        //console.log(mention_data)
         await pool.query("INSERT INTO notifications SET ?",mention_data);
-
-     
 
          io.to(MenitonUser.id).emit('mention', {
           task_id: dados.task_id,
           name: MenitonUser.name,
           message : `${MenitonUser.name}, você foi mencionado por <b>${name}</b> na Tarefa <b>${dados.task_id}</b> 👇.<br>"<b>${dados.description}</b>"`
          });
+         
       });
       //io.sockets.emit("getCountTasks", tasksCount);
      
