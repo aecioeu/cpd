@@ -862,10 +862,10 @@ router.get("/view/:task_id", async function (req, res) {
 
 
   var assingned = false;
-  if (taskTecnico) {
+ /* if (taskTecnico) {
     var tecnico_assingned = taskTecnico.map((el) => el.id_tecnico);
     assingned = tecnico_assingned.includes(req.user.id.toString());
-  }
+  }*/
 
   res.render("admin/tasks/view.ejs", {
     user: req.user,
