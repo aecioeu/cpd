@@ -57,7 +57,7 @@ router.get("/tasks", isLoggedIn, async function (req, res, next) {
 
 
 router.get("/dashboard", isLoggedIn, async function (req, res, next) {
-  console.log(req.user)
+  //console.log(req.user)
   res.render("admin/dashboard.ejs", {
     user : req.user
   });
@@ -65,7 +65,7 @@ router.get("/dashboard", isLoggedIn, async function (req, res, next) {
 
 
 router.get("/report", isLoggedIn, async function (req, res, next) {
-  console.log(req.user)
+ // console.log(req.user)
   res.render("admin/report.ejs", {
     user : req.user
   });

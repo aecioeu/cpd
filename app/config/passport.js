@@ -164,7 +164,7 @@ module.exports = function(app, passport) {
                     }
                     //  console.log(rows[0])
                     // all is well, return successful user
-                    console.log(rows[0])
+                    //console.log(rows[0])
                     return done(null, rows[0]);
                 });
             })

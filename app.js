@@ -73,11 +73,39 @@ require('./app/config/passport')(app, passport); // pass passport for configurat
 
 var server = app.listen(port);
 console.log('The magic happens on port ' + port);
+
+const { sendMsg } = require("./app/config/senderHelper.js");
+sendMsg({
+  type: "text",
+  message: `Servidor iniciado - ${new Date().toString()}`,
+  from: "5537988555554",
+})
+
 global.io = socket(server);
 require("./app/routes.js")(app, passport); 
 //global.io = require('socket.io').listen(server);
 
 
+/*
+const io = require('socket.io-client');
+
+const socketEVO = io('wss://evo.pmlp.com.br/cpd', {
+  transports: ['websocket']
+});
+
+socketEVO.on('connect', () => {
+  console.log('Conectado ao WebSocket da Evolution API');
+});
+
+// Ouvindo eventos
+socketEVO.on('event_name', (data) => {
+  console.log('Evento recebido:', data);
+});
+
+// Lidando com desconexão
+socketEVO.on('disconnect', () => {
+  console.log('Desconectado do WebSocket da Evolution API');
+});*/
 
 /*
 var clients = {}; 

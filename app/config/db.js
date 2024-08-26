@@ -86,7 +86,7 @@ const getTaskArchive222 = async (data) => {
 
 const getTaskArchive = async (data) => {
 
-  console.log(data)
+  //console.log(data)
  
 
 
@@ -185,7 +185,7 @@ const tasks = []
   if(itensOnTask.length > 0){
     //getTaskData
     for (const iten of itensOnTask) {
-      console.log(iten.task_id)
+      //console.log(iten.task_id)
 
       var task = await getTaskData(iten.task_id)
       if(task.length > 0){
@@ -299,7 +299,7 @@ const getTaskData = async (task_id) => {
 
   const updateTaskDate = async (task_id, update) => {
 
-    console.log(update)
+    //console.log(update)
 
     await pool.query(
       "UPDATE tasks SET last_notification = ?  WHERE task_id = ?",
@@ -413,7 +413,7 @@ const getTaskData = async (task_id) => {
 
     const data = rows
 
-    console.log
+    //console.log
     // this gives an object with dates as keys
     const groups = data.reduce((groups, game) => {
     

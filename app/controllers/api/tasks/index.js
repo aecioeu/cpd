@@ -69,7 +69,7 @@ router.get('/patrimonioOficio/:oficio_id', async function (req, res) {
 
   const task_id =oficio[0].task_id;
   //const data = await db.getTaskData(task_id);
-  console.log(oficio[0].itens)
+  //console.log(oficio[0].itens)
 
  
   let rows = await db.getOficioPatrimonio(task_id, oficio[0].itens);

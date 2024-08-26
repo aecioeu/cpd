@@ -23,18 +23,15 @@ var request = require('request');
 require('dotenv').config()
 
 
-
-
-
-
-
 async function lembrete() {
-//subtract(15, "days")
-  var start = moment().subtract(15, "days").format("YYYY-MM-DD 00:00:01"),
-     end = moment().format("YYYY-MM-DD 23:59:59");
+  console.log("INICIANDO ENVIO DE MSG DE LEMBRETES")
+  //subtract(15, "days")
+  var start = moment().subtract(28, "days").startOf('day').format("YYYY-MM-DD HH:mm:ss"),
+      end = moment().endOf('day').format("YYYY-MM-DD HH:mm:ss");
 
-  //19/09 00:00 ate 19/09 23:59
   var completeTasks = await db.getCompleteTask(start, end);
+
+  console.log("Tarefas completas nos últimos 28 dias", completeTasks);
 
   //console.log(start, end)
   //console.log("Total: ", completeTasks.length)
@@ -77,36 +74,18 @@ async function lembrete() {
                 \n*Providencie a retirada o mais breve possivel.*
                 \n\n_👉Mensagem automática, não é necessario responder._
                 `
-  
        
-           console.log("MENSAGEM EM FILA NA API")
+            console.log("MENSAGEM EM FILA NA API")
+     
+            sendMsg({
+              type: "text",
+              message: message,
+              from: task.whatsapp,
+            })
 
-       
-            var options = {
-              'method': 'POST',
-              'url': `${process.env.API_EVOLUTION_URL}/message/sendText/${process.env.SESSION_NAME}`,
-              'headers': {
-                'Content-Type': 'application/json',
-                'apikey': `${process.env.GLOBAL_API_KEY}`
-              },
-              body: JSON.stringify({
-                "number": task.whatsapp,
-                "options": {
-                  "delay": 1200,
-                  "presence": "composing",
-                  "linkPreview": false
-                },
-                "textMessage": {
-                  "text": message
-                }
-              })
-
-            };
-            request(options, function (error, response) {
-              if (error) throw new Error(error);
-              console.log(response.body);
-            });
-
+            db.insertHistory("task", `Notificação via Whatsapp` , `Notificação enviada as ${moment().format(
+              "DD/MM/YYYY"
+            )} às ${moment().format("HH:mm")} lembrete para retirada de patrimonios do CPD.`, ``, task.task_id)
                                
 
             await db.updateTaskDate(
@@ -133,19 +112,18 @@ async function lembrete() {
 
 “At minute 0 past hour 8, 10, and 14 on Monday, Tuesday, Wednesday, Thursday, and Friday.”
 */
+lembrete()
 var cron = require("node-cron");
 
-if(process.env.PRODUCTION == true){
-  console.log('ENVIANDO MSNGENS')
+    if(process.env.PRODUCTION == true){
+      console.log('ENVIANDO MSNGENS')
 
-lembrete()
-cron.schedule("0 8,10,12,14 * * 1,2,3,4,5", async () => {
+         
+              cron.schedule("0 8,10,12,14 * * 1,2,3,4,5", async () => {
+                lembrete();
+              });
 
-//cron.schedule("0 8,10,12,14 * * 1,2,3,4,5", async () => {
-    lembrete();
-});
-
-}
+    }
 
 // Estrutura /TASKS
 
@@ -463,7 +441,7 @@ router.post("/note", isLoggedIn, async function (req, res) {
   };
 
   var mentions = dados.mentions
-  console.log(dados)
+  //console.log(dados)
 
 
   if(mentions.length > 0){
@@ -492,7 +470,7 @@ router.post("/note", isLoggedIn, async function (req, res) {
           name: MenitonUser.name,
           message : `${MenitonUser.name}, você foi mencionado por <b>${name}</b> na Tarefa <b>${dados.task_id}</b> 👇.<br>"<b>${dados.description}</b>"`
          });
-         
+
       });
       //io.sockets.emit("getCountTasks", tasksCount);
      
@@ -579,7 +557,19 @@ router.post("/services", async function (req, res) {
 
 router.post("/sign", async function (req, res) {
   const dados = req.body;
-  var data = {
+
+  const data = await db.getTaskData(dados.task_id);
+  const task_patrimonio = await db.getTaskPatrimoniobyIdTask(dados.task_id);
+  var solicitante = data[0].name.toString().split(" ");
+
+    let tpl =''
+    task_patrimonio.forEach(function (patrimonio, index) {
+      tpl += `_${patrimonio.registration} - ${patrimonio.name}_\n`;
+    });
+
+    console.log(dataTarefa)
+
+  var dataTarefa = {
     task_id: dados.task_id,
     id_servidor: dados.id_servidor,
     sign_registration: dados.sign_registration,
@@ -590,9 +580,33 @@ router.post("/sign", async function (req, res) {
     tecnico_name: req.user.name,
   };
 
-  await pool.query("INSERT INTO task_sign SET ?", data, function (err, result) {
+  await pool.query("INSERT INTO task_sign SET ?", dataTarefa, function (err, result) {
     if (err) console.log(err);
     //atualizar o servidor como o telefone
+
+    db.insertHistory("task", `Retirada de Patrimonio` , `${dados.sign_registration} - ${dados.sign_name} (${dados.sign_phone}) realizou a retirada dos patrimonios da Tarefa #${dados.task_id}`, req.user.id, dados.task_id)
+    //enviando para o contato que deu entrada
+   
+    sendMsg({
+      type: "text",
+      message: `*${capitalizeFirstLetter(solicitante[0].toLowerCase())}*, o CPD da Prefeitura informa que os itens da *Tarefa #${dados.task_id}* que estavam em manutenção foram retirados.
+            \nOs patrimônios:
+            \n${tpl}
+            \nJá foram devidamente retirados e estão sob responsabilidade do solicitante.
+            \n*RETIRADO POR*
+            \n ${dados.sign_registration} - ${dados.sign_name} (${dados.sign_phone})
+            \n*Caso tenha alguma dúvida ou necessite de mais informações, por favor, entre em contato com o CPD.*
+            \n\n_👉Mensagem automática, não é necessário responder._`,
+      from: data[0].whatsapp,
+    })
+
+      db.insertHistory("task", `Notificação via Whatsapp` , `Notificação enviada as ${moment().format(
+        "DD/MM/YYYY"
+      )} às ${moment().format("HH:mm")} informando retirada de patrimonios do CPD.`, req.user.id, dados.task_id)
+
+ //----------------------------
+
+
 
     //res.redirect('/tasks/edit/' + task_id);
     res.send({ status: "signed" });
@@ -677,10 +691,10 @@ router.get("/invite/:task_id", isLoggedIn, async function (req, res) {
         //atualizar o servidor como o telefone
         db.insertHistory(
           "task",
+          `Técnicos na Tarefa`,
           `${req.user.name} assumiu a tarefa ${moment().format(
             "DD/MM/YYYY"
           )} às ${moment().format("HH:mm")}.`,
-          ``,
           req.user.id,
           task_id
         );
@@ -715,33 +729,28 @@ router.get("/complete/:task_id", isLoggedIn, async function (req, res) {
       if (data[0].notification == 'on') {
       try {
         if(data[0].type == 'in'){
-          let message  = await client.sendMessage( data[0].whatsapp, { text: `*${capitalizeFirstLetter(
+
+
+         sendMsg({
+        type: "text",
+        message: `*${capitalizeFirstLetter(
             solicitante[0].toLowerCase()
-          )}*, o CPD da Prefeitura tem um *recado importante para você*.
+          )}*, o CPD da Prefeitura tem um *recado importante para você* sobre os itens que estão em manutenção.
       \nOs patrimônios:
       \n${tpl}
       \nJá estão prontos 🥳, aguardando sua retirada.
       \n*Providencie a retirada o mais breve possivel.*
       \n\n_👉Mensagem automática, não é necessario responder._
-      ` })
+      `,
+        from: data[0].whatsapp,
+      })
 
-          console.log(message)
-       /*   sendMsg(
-            {
-              type: "text",
-              message: `*${capitalizeFirstLetter(
-                solicitante[0].toLowerCase()
-              )}*, o CPD da Prefeitura tem um *recado importante para você*.
-          \nOs patrimônios:
-          \n${tpl}
-          \nJá estão prontos 🥳, aguardando sua retirada.
-          \n*Providencie a retirada o mais breve possivel.*
-          \n\n_👉Mensagem automática, não é necessario responder._
-          `,
-              from: data[0].whatsapp,
-            },
-            client
-          );*/
+
+      db.insertHistory("task", `Notificação via Whatsapp` , `Notificação enviada as ${moment().format(
+        "DD/MM/YYYY"
+      )} às ${moment().format("HH:mm")} para retirada do Patrimonio em manutenção.`, req.user.id, task_id)
+
+    
         }
 
       
@@ -764,10 +773,10 @@ router.get("/complete/:task_id", isLoggedIn, async function (req, res) {
 
   db.insertHistory(
     "task",
+    `Conclusão da Tarefa`,
     `${req.user.name} concluiu a tarefa ${moment().format(
       "DD/MM/YYYY"
     )} às ${moment().format("HH:mm")}.`,
-    ``,
     req.user.id,
     task_id
   );
@@ -798,32 +807,17 @@ router.get("/archive/:task_id", isLoggedIn, async function (req, res) {
 
       try {
 
-        let message  = await client.sendMessage(data[0].whatsapp, { text: `*${capitalizeFirstLetter(
+    sendMsg({
+      type: "text",
+      message: `*${capitalizeFirstLetter(
           solicitante[0].toLowerCase()
-        )}*, o CPD da Prefeitura tem um recado importante para você.
-    \nA solicitação *#${data[0].task_id}* foi finalizada.
-    \nFoi um prazer atendê-lo 😄. Caso tenha alguma outra dúvida, não hesite em nos procurar novamente!
+        )}*, a solicitação *#${data[0].task_id}* foi finalizada.
+    \nFoi um prazer atendê-lo(a) 😄. Caso tenha alguma outra dúvida, não hesite em nos procurar novamente!
     \nAté mais e bom trabalho!
     \n\n_👉Mensagem automática, não é necessario responder._
-    ` })
-        console.log(message)
-          /*await sendMsg(
-            {
-              type: "text",
-              message: `*${capitalizeFirstLetter(
-                solicitante[0].toLowerCase()
-              )}*, o CPD da Prefeitura tem um recado importante para você.
-          \nA solicitação *#${data[0].task_id}* foi finalizada.
-          \nFoi um prazer atendê-lo 😄. Caso tenha alguma outra dúvida, não hesite em nos procurar novamente!
-          \nAté mais e bom trabalho!
-          \n\n_👉Mensagem automática, não é necessario responder._
-          `,
-              from: data[0].whatsapp,
-            },
-            client
-          );*/
- 
-
+    `,
+      from: data[0].whatsapp,
+    })
       
       } catch (error) {
         console.log("erro ao enviar" , error);
@@ -837,8 +831,8 @@ router.get("/archive/:task_id", isLoggedIn, async function (req, res) {
 
     db.insertHistory(
       "task",
+      `Conclusão e Arquivamento`,
       `${req.user.name} concluiu e arquivou a tarefa ${moment().format("DD/MM/YYYY")} às ${moment().format("HH:mm")}.`,
-      ``,
       req.user.id,
       task_id
     );
@@ -1028,7 +1022,7 @@ router.post("/create/patrimonio", async function (req, res) {
     //inserir a history de task criada pelo usuario x
     db.insertHistory(
       "task",
-      `Novo Patrimônio adicionado a tarefa`,
+      `Novo Patrimônio Adicionado`,
       `${req.user.name} adicionou o patrimônio nº ${dados.registration} - ${dados.name} na tarefa.`,
       req.user.id,
       dados.task_id

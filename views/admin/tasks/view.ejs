@@ -366,12 +366,12 @@ tbody, td, tfoot, th, thead, tr {
                           <div class="">
 
 
-                            <span class="fs-13 mt-2 mb-1 ">
+                            <span class="fs-13 mt-2 mb-1">
                               PROBLEMA RELATADO</span>
                             <br>
 
                             <div class="task-box mb-0">
-                              <p class="text-dark mb-0 fs-16">
+                              <p class="text-dark mb-0 fs-16 bold">
                                 <%-data.description%>
                               </p>
                             </div>
@@ -403,13 +403,12 @@ tbody, td, tfoot, th, thead, tr {
                         <div class="row">
                           <div class="col-md-12">
                             <hr class="mt-2 mb-2">
-                            <span class="fs-12 mt-2 mb-1 bold">
-                              Técnicos:
+                            <span class="fs-13 mt-2 mb-2">
+                              TÉCNICOS NO ANTEDIMENTO: </span><br>
                             
-                            </span>
 
                             <% task_tecnico.forEach((tecnico, index) => { %>
-                              <span class="badge badge-soft-secondary fs-13"><%-tecnico.name%></span>
+                              <span class="badge badge-soft-secondary fs-13 mt-1"><%-tecnico.name%></span>
                             <%})%>
   
                        
@@ -437,7 +436,9 @@ tbody, td, tfoot, th, thead, tr {
                     
                       <div class="mb-1 mt-2 row">
                         <div class="col-lg-12">
-                          <h5 class="mt-2 bold">PATRIMONIO E SERVIÇOS</h5>
+                          <span class="fs-13 mt-2 mb-1">
+                            PATRIMONIO E SERVIÇOS</span>
+                         <!-- <h5 class="mt-2 bold">PATRIMONIO E SERVIÇOS</h5>-->
                           <%if(data.status != "complete" && data.status != "archive"){%>
                           <select class="form-select" name="servidor" data-plugin="select_patrimonio">
                           </select>
@@ -484,7 +485,9 @@ tbody, td, tfoot, th, thead, tr {
                      
                         <div class="mb-3 mt-1 row">
                           <div class="col-lg-12">
-                            <h5 class="bold">LAUDOS TÉCNICOS</h5>
+                            <span class="fs-13 mt-2 mb-1">
+                              LAUDOS TÉCNICOS</span>
+                            
                           </div>
 
                           <table class="table table-striped mb-0">
@@ -819,11 +822,13 @@ function list_service(services){
 
   if(services){
 
-    var tpl ='<h6 class="fs-13 mt-0 mb-1 mt-2">INFORMAÇÕES SOBRE:</h6>'
+    var tpl ='<h6 class="fs-13 mt-0 mb-1 mt-2">INFORMAÇÕES:</h6>'
 
     services.forEach(function(item, index) {
 
-      tpl += `<div style="display: flow-root;" class="mb-1">
+      tpl += `<div style="display: flow-root; border-radius: 7px;
+    padding: 6px;
+    border: 1px solid #e4e6e8;" class="mb-1 mt-3">
         
         <div class="dropdown align-self-center float-end ${DeleteButtom()}">
                               
@@ -840,9 +845,18 @@ function list_service(services){
                               </div>
                           `
   
-     tpl += `<p class="text-muted fs-13 m-0"><span class="badge bg-secondary" style="vertical-align: text-top;"><i class="uil uil-info-circle"></i> ${item.tecnico_name}</span> ${moment(item.service_created).format('DD/MM/YYYY HH:mm')} - ${item.service}</p> `
+     tpl += `<h5 class="text-muted fs-13 m-0"><span class="badge badge-soft-secondary " style="vertical-align: text-top;
+    position: absolute;
+    margin-top: -22px;
+    margin-left: -11px;
+    font-size: 13px;
+    background: #e4e6e8;"><i class="uil uil-info-circle"></i> ${item.tecnico_name}</span> 
+    <span class="mt-1" style="
+    font-size: 14px;
+    line-height: 28px;
+">${moment(item.service_created).format('DD/MM/YYYY HH:mm')} - ${item.service}</span></h5> `
      if(item.description){
-      tpl +=`<p class="text-muted fs-12 m-0 mb-1"><strong>OBSERVAÇÃO: </strong>${item.description}</p>`
+      tpl +=`<p class="text-muted fs-12 m-0 mb-1 mt-0"><strong>OBSERVAÇÃO: </strong>${item.description}</p>`
      }
 
      tpl += `</div>`
@@ -935,7 +949,7 @@ return ``
                                             <div class="dropdown-menu dropdown-menu-end" style="">
                                               
                                                 <a href="javascript:void(0);" onclick="deletePatrimonio('${row.id}', '<%- data.task_id %>')" class="dropdown-item text-danger">
-                                                    <i class="uil uil-trash me-2"></i>APAGAR PATRIMÔNIO - ${row.name}
+                                                    <i class="uil uil-trash me-2"></i>APAGAR PATRIMÔNIO - ${row.name.length > 30 ? row.name.substring(0, 30) + "..." : row.name}
                                                    
 
                                                 </a>

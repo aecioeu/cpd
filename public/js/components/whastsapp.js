@@ -1,4 +1,3 @@
-console.log('funcoes whats')
 
 const sendMessage = async (data) => {
     const response = await fetch("/api/whatsapp/send", {

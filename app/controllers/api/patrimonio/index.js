@@ -35,7 +35,7 @@ router.get('/search', async function (req, res) {
 router.post('/delete', async function (req, res) {
 
   const dados = req.body
-  console.log(dados.id)
+ // console.log(dados.id)
 
   var data = {
     id : dados.id,
