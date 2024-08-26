@@ -60,7 +60,7 @@ async function lembrete() {
           //date.setSeconds(date.getSeconds() + 5);
           date = moment().add(15, "seconds").format("YYYY-MM-DD HH:mm:ss")
 
-          console.log(tpl , task.whatsapp)
+         // console.log(tpl , task.whatsapp)
           //console.log('-------------------------------')
 
           schedule.scheduleJob(`${task.task_id}`, date, async function () {
@@ -112,12 +112,12 @@ async function lembrete() {
 
 “At minute 0 past hour 8, 10, and 14 on Monday, Tuesday, Wednesday, Thursday, and Friday.”
 */
-lembrete()
+
 var cron = require("node-cron");
 
     if(process.env.PRODUCTION == true){
       console.log('ENVIANDO MSNGENS')
-
+      lembrete()
          
               cron.schedule("0 8,10,12,14 * * 1,2,3,4,5", async () => {
                 lembrete();
