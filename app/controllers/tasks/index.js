@@ -115,7 +115,7 @@ async function lembrete() {
 
 var cron = require("node-cron");
 
-    if(process.env.PRODUCTION == true){
+   
       console.log('ENVIANDO MSNGENS')
       lembrete()
          
@@ -123,7 +123,7 @@ var cron = require("node-cron");
                 lembrete();
               });
 
-    }
+    
 
 // Estrutura /TASKS
 
