@@ -11,38 +11,42 @@ const { sendMsg }  = require('../../../config/senderHelper')
 router.post('/check', async function (req, res) {
 
   const body = req.body
-  const number = body.number !== "" ? body.number.toString().replace(/\D/g, "") : ''
+  const number = body.number
   
-  //console.log(number)
+  if(number !== null){
 
-  var options = {
-    'method': 'POST',
-    'url': `${process.env.API_EVOLUTION_URL}/chat/whatsappNumbers/${process.env.SESSION_NAME}`,
-    'headers': {
-      'Content-Type': 'application/json',
-      'apikey': `${process.env.GLOBAL_API_KEY}`
-    },
-    body: JSON.stringify({
-      "numbers": [
-        `55${number}`
-      ]
-    })
+    var options = {
+      'method': 'POST',
+      'url': `${process.env.API_EVOLUTION_URL}/chat/whatsappNumbers/${process.env.SESSION_NAME}`,
+      'headers': {
+        'Content-Type': 'application/json',
+        'apikey': `${process.env.GLOBAL_API_KEY}`
+      },
+      body: JSON.stringify({
+        "numbers": [
+          `55${number.toString().replace(/\D/g, "")}`
+        ]
+      })
+    
+    };
+    //console.log(options)
+   
+    request(options, function (error, r) {
+      try {
+        if (error) throw error;  
+        const response = JSON.parse(r.body)
+        //console.log(r, response);
+        return res.status(200).json(response[0]);
   
-  };
-  //console.log(options)
- 
-  request(options, function (error, r) {
-    try {
-      if (error) throw error;  
-      const response = JSON.parse(r.body)
-      console.log(r, response);
-      return res.status(200).json(response[0]);
+      } catch (error) {
+        console.error('Ocorreu um erro:', error.message);
+      }
+    });
 
-    } catch (error) {
-      console.error('Ocorreu um erro:', error.message);
-    }
-  });
+  } else{
 
+    return res.status(200).json({msg : "Invalid Number"});
+  }
 
 //const [result] = await client.onWhatsApp("55" + number);
 
