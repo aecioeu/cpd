@@ -75,11 +75,11 @@ var server = app.listen(port);
 console.log('The magic happens on port ' + port);
 
 const { sendMsg } = require("./app/config/senderHelper.js");
-sendMsg({
+/*sendMsg({
   type: "text",
   message: `Servidor iniciado - ${new Date().toString()}`,
   from: "5537988555554",
-})
+})*/
 
 global.io = socket(server);
 require("./app/routes.js")(app, passport); 

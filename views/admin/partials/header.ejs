@@ -23,7 +23,24 @@
 <!-- icons -->
 <link href="/css/icons.min.css" rel="stylesheet" type="text/css">
 <script src="/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="/js/qz.js"></script>
 <script>
+
+qz.websocket.connect({host: "10.1.1.111", usingSecure : false }).then(function() {
+   alert("Connected!");
+
+qz.printers.find().then(function(data) {
+  console.log("printers" + data)
+      var list = '';
+      for(var i = 0; i < data.length; i++) {
+         list += "&nbsp; " + data[i] + "<br/>";
+     }
+     console.log(list)
+   //  displayMessage("<strong>Available printers:</strong><br/>" + list);
+  }).catch(function(e) { console.error(e); });
+
+});
+
 
 const socket = io.connect(`${window.location.origin}`);
 
@@ -38,8 +55,8 @@ socket.on('connect', function(){
 
 
 socket.on('getCountTasks', function(data){
-  console.log(data);
-  taskCount(data)    
+ // console.log(data);
+  //taskCount(data)    
 });
 
 socket.on('mention', function(data){
@@ -81,7 +98,7 @@ $('.simplebar-content').prepend(`
 
 
 socket.on('alert', function(data){
-  console.log(data);
+ // console.log(data);
 });
 
   

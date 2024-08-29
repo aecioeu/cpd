@@ -23,6 +23,8 @@ var request = require('request');
 require('dotenv').config()
 
 
+
+
 async function lembrete() {
   console.log("INICIANDO ENVIO DE MSG DE LEMBRETES")
   //subtract(15, "days")
@@ -31,7 +33,7 @@ async function lembrete() {
 
   var completeTasks = await db.getCompleteTask(start, end);
 
-  console.log("Tarefas completas nos últimos 28 dias", completeTasks);
+  console.log("Tarefas completas nos últimos 28 dias");
 
   //console.log(start, end)
   //console.log("Total: ", completeTasks.length)
@@ -236,7 +238,7 @@ var min = tecAtendimentos.reduce(function(res, obj) {
   return (obj.Atendimentos < res.Atendimentos) ? obj : res;
 });
 
-console.log(min)
+//console.log(min)
 
 
 
@@ -257,7 +259,7 @@ router.post("/create", isLoggedIn, async function (req, res) {
   const dados = req.body;
   const task_id = makeid(5);
 
-  console.log(dados);
+ //console.log(dados);
 
   let user = req.user.id;
 
@@ -494,37 +496,155 @@ router.post("/note", isLoggedIn, async function (req, res) {
 });
 
 router.get("/printer",  async function (req, res) {
+
+  
   console.time("Print Time");
   const { getDefaultPrinter, getPrinters, print  } = require("pdf-to-printer");
   getPrinters().then(console.log);
   console.log("-------------");
   getDefaultPrinter().then(console.log);
 
-  var html_to_pdf = require("html-pdf-node");
+  const pdf = require('html-pdf-node');
 
-  let options = { format: "A4" };
-  // Example of options with args //
-  // let options = { format: 'A4', args: ['--no-sandbox', '--disable-setuid-sandbox'] };
+  let options = {
+    //format: 'A4', // Default format, we'll override with custom dimensions
+    width: '150mm',
+    height: '30mm',
+    printBackground : true,
+    margin: {
+        top: '0mm',
+        right: '0mm',
+        bottom: '0mm',
+        left: '0mm'
+    }
+};
 
+function templateOS(task, solictante, setor, descricao, volume_atual, volume){
 
-var file_name = `./tmp/${Math.random().toString(36).substr(7)}.pdf`
-  var html_to_pdf = require("html-pdf-node");
-  html_to_pdf.generatePdf({url: "http://localhost/tasks/print/5RS6J"},
-     {
-        path:file_name,
-        //margin: { top: "150px", bottom: "150px", right: "0px", left: "0px" },
-        format: "a4",
-      }
-    )
-    .then((pdfBuffer) => {
-      //console.log("PDF Buffer:-", pdfBuffer);
-     //print(file_name).then(console.log);
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 150mm; /* Define a largura da etiqueta */
+            height: 30mm; /* Define a altura da etiqueta */
+            text-align: left;
+            border: 1px solid #000;
+            box-sizing: border-box;
+        }
+        .label {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            display: flex;
+            flex-direction: row; /* Organiza os elementos em linha */
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+        }
+        .left {
+            width: 20%; /* Define a largura do lado esquerdo */
+            display: flex;
+            flex-direction: column; /* Organiza os itens em coluna */
+            justify-content: center;
+            align-items: flex-start;
+            margin-left: 10px;
+        }
+        .right {
+            width: 80%; /* Define a largura do lado direito */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        h1 {
+            margin: 0;
+            font-size: 12pt; /* Ajuste o tamanho da fonte conforme necessário */
+        }
+        h1 small, h2 small, span small {
+            font-size: 10px;
+            display: block;
+        }
+            h1 small{
+            display: table;
+    background: #000;
+    color: #fff;
+    padding: 1px;}
+        h2{
+            margin: 0;
+            display: block;
+            font-size: 20pt;
+            padding-bottom: 10px;
+            line-height: 20pt;
+        }
+        h1 small{
+            display: table;
+    background: #000;
+    color: #fff;
+    padding: 1px;}
+    
+        h3{
+            margin: 0;
+            font-size: 10pt;
+        }
+        span {
+            font-size: 22pt;
+            font-weight: 600;
+        }
+        .descricao{
+            font-size: 11pt;
+            font-weight: 400;
+        }
+    </style>
+    <title>Etiqueta</title>
+</head>
+<body>
+    <div class="label">
+        <div class="left">
+            <h2><small>NÚMERO DA O.S</small>#${task}</h2>
+            <h3>VOLUME: ${volume_atual}/${volume}</h3>
+        </div>
+        <div class="right">
+            <h1><small>SOLICITANTE</small>${solictante}</h1>
+            <h1><small>SETOR/LOCAL</small>${setor}</h1>
+            <h1><small>PROBLEMA RELATADO</small> <span class="descricao">${descricao}</span></h1>
+        </div>
+    </div>
+</body>
+</html>
+`
+}
+
+for (let i = 0; i < 5; i++) {
+  
+  pdf.generatePdf({ content: templateOS("1234", "Aecio", "auhsduahs", 1, 3) }, options).then(pdfBuffer => {
+    var fileName = `etiqueta-1de3-os-1234.pdf`
+    fs.writeFileSync(fileName, pdfBuffer);
+    console.log("PDF generated successfully!");
+
+     //console.log("PDF Buffer:-", pdfBuffer);
+     //print('label.pdf', { printer: "Zebra" }).then(console.log);
      console.timeEnd("Print Time");
 
 
+}).catch(error => {
+    console.error("Error generating PDF:", error);
+});
 
-    });
 
+}
+
+
+
+ 
  
 
   res.json({ status: true });
@@ -858,11 +978,11 @@ router.get("/view/:task_id", async function (req, res) {
   const oficios = await db.getOficios(task_id)
   console.log(oficios)
 
-  await pool.query("UPDATE notifications SET status = '1' WHERE task_id = ?", task_id);
+   pool.query("UPDATE notifications SET status = '1' WHERE task_id = ?", task_id);
 
 
   var assingned = false;
-  
+console.log("USER DATE" + req.user)
   if (taskTecnico) {
     var tecnico_assingned = taskTecnico.map((el) => el.id_tecnico);
     assingned = tecnico_assingned.includes(req.user.id.toString());
