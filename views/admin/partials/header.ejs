@@ -26,7 +26,10 @@
 <script type="text/javascript" src="/js/qz.js"></script>
 <script>
 
-qz.websocket.connect({host: "10.1.1.111", usingSecure : false }).then(function() {
+
+
+
+qz.websocket.connect({host: "localhost", usingSecure : true }).then(function() {
    alert("Connected!");
 
 qz.printers.find().then(function(data) {

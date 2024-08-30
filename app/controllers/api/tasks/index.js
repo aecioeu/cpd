@@ -3,6 +3,25 @@ const router = express.Router();
 const moment = require('moment')
 var db = require('../../../config/db')
 
+/*
+var qz = require('qz-tray');
+//qz.api.setPromiseType(require('q').Promise);
+qz.api.setWebSocketType(require('ws'));
+
+qz.websocket.connect({host: "locahost", usingSecure : false})
+.then(qz.printers.getDefault)
+.then(function(printer) {
+   console.log("The default printer is: " + printer);
+})
+.then(qz.websocket.disconnect)
+.then(function() {
+   process.exit(0);
+})
+.catch(function(err) {
+   console.error(err);
+  // process.exit(1);
+});
+*/
 
 
 var pool = require("../../../config/pool-factory");
