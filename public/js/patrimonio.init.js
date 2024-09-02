@@ -7,9 +7,9 @@ $(document).ready(function() {
 function services (services) {
     tpl = '';
     if(services.length > 0){
-        tpl = '<div class="card-body border-top"><h6 class="header-title mb-1 mt-2">Histórico de Serviços</h6>'
-        tpl += `<div class="left-timeline mt-3 mb-3 pl-4">
-                                                <ul class="list-unstyled events mb-0">`
+        tpl = '<div class="card-body border-top">'
+        tpl += `<div class="left-timeline  pl-4">`
+        tpl += `<ul class="list-unstyled events mb-0">`
 
     }
 
@@ -36,7 +36,7 @@ services.forEach(function (service, index) {
         </div>
             </div>`*/
             tpl += `    <li class="event-list">
-                                                        <div class="pb-4">
+                                                       
                                                             <div class="media">
                                                                 <div class="event-date text-center mr-4">
                                                                     <div class="bg-soft-primary p-1 rounded text-primary font-size-14">
@@ -50,14 +50,13 @@ services.forEach(function (service, index) {
                                                                 
                                                                     </div>
                                                             </div>
-                                                        </div>
+                                                      
                                                     </li>
                                                     
                                                `
     })
 
-    tpl += ` </ul>
-          </div></div>`
+    tpl += ` </ul> </div></div>`
     
 return tpl
 
@@ -115,7 +114,7 @@ function tplte(row) {
             </p>
 
 
-            ${services(row.services)}
+            
                  
          
         </div>
@@ -147,6 +146,9 @@ function tplte(row) {
                 </div>
             </div>
         </div>
+ 
+        ${services(row.services)}
+     
         
     </div>
     <!-- end card -->
