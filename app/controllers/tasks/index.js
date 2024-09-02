@@ -662,9 +662,12 @@ router.post("/sign", async function (req, res) {
   var solicitante = data[0].name.toString().split(" ");
 
     let tpl =''
-    task_patrimonio.forEach(function (patrimonio, index) {
-      tpl += `_${patrimonio.registration} - ${patrimonio.name}_\n`;
-    });
+    if(task_patrimonio){
+      task_patrimonio.forEach(function (patrimonio, index) {
+        tpl += `_${patrimonio.registration} - ${patrimonio.name}_\n`;
+      });
+    }
+    
 
     //console.log(dataTarefa)
 
