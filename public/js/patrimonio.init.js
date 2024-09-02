@@ -7,12 +7,24 @@ $(document).ready(function() {
 function services (services) {
     tpl = '';
     if(services.length > 0){
-        tpl = '<h6 class="header-title mb-1 mt-2">Histórico de Serviços</h6>'
+        tpl = '<div class="card-body border-top"><h6 class="header-title mb-1 mt-2">Histórico de Serviços</h6>'
+        tpl += `<div class="left-timeline mt-3 mb-3 pl-4">
+                                                <ul class="list-unstyled events mb-0">`
+
     }
 
 services.forEach(function (service, index) {
-        tpl += `<div class="row mt-2">
-        <div class="col">
+       /* tpl += `<div class="row mt-2">
+        <div class="col-md-2 text-center">
+        
+        <a href="/tasks/view/${service.task_id}">
+        <div class="icon-item">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+        <span>Acesar</span>
+        </div> </a>
+
+        </div>
+        <div class="col-md-10">
             
               
                 <label class="form-check-label" for="task2">
@@ -22,13 +34,37 @@ services.forEach(function (service, index) {
                 <p class="fs-13 text-muted">${moment(service.created).fromNow()} em ${moment(service.created).format("DD/MM/YYYY HH:mm:ss")}</p>
          
         </div>
-            </div>`
+            </div>`*/
+            tpl += `    <li class="event-list">
+                                                        <div class="pb-4">
+                                                            <div class="media">
+                                                                <div class="event-date text-center mr-4">
+                                                                    <div class="bg-soft-primary p-1 rounded text-primary font-size-14">
+                                                                        ${moment(service.created).fromNow()}</div>
+                                                                        
+                                                                </div>
+                                                                <div class="media-body ml-2">
+                                                                
+                                                                    <h6 class="font-size-15 mt-0 mb-1">${service.service} <a href="/tasks/view/${service.task_id}"> <svg style="float:right" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg> </a></h6>
+                                                                    <p class="text-muted font-size-14">${service.description}. <br><small><strong>Em ${moment(service.created).format("DD/MM/YYYY HH:mm")}.</strong></small></p>
+                                                                
+                                                                    </div>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    
+                                               `
     })
+
+    tpl += ` </ul>
+          </div></div>`
     
 return tpl
 
 
 }
+
+
     
 
 function tecnicos(tecnicos) {

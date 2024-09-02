@@ -1,0 +1,3 @@
+
+    public boolean showGatewayDialog(final RequestState request, final String prompt, final Point position) {
+        if(true) return true; // WARNING: Insecure! Allows any device to talk USB, Serial, Network Info, Printer

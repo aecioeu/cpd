@@ -1,0 +1,98 @@
+<html>
+          <style>
+              body {
+                  font-family: Arial, sans-serif;
+                  margin: 0;
+                  padding: 0;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  width: 100mm; /* Define a largura da etiqueta */
+                  height: 30mm; /* Define a altura da etiqueta */
+                  text-align: left;
+                  border: 1px solid #000;
+                  box-sizing: border-box;
+              }
+              .label {
+                  width: 100%;
+                  height: 100%;
+                  padding: 0;
+                  display: flex;
+                  flex-direction: row; /* Organiza os elementos em linha */
+                  justify-content: space-between;
+                  align-items: center;
+                  box-sizing: border-box;
+              }
+              .left {
+                  width: 120px; /* Define a largura do lado esquerdo */
+                  display: flex;
+                  flex-direction: column; /* Organiza os itens em coluna */
+                  justify-content: center;
+                  align-items: flex-start;
+                  margin-left: 10px;
+              }
+              .right {
+                  width: 300px; /* Define a largura do lado direito */
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: center;
+                  align-items: flex-start;
+              }
+              h1 {
+                  margin: 0;
+                  padding-bottom:2px;
+                  font-size: 9pt; /* Ajuste o tamanho da fonte conforme necessário */
+              }
+              h1 small, h2 small, span small {
+                  font-size: 8px;
+                  display: block;
+              }
+                  h1 small{
+                  display: table;
+          background: #000;
+          color: #fff;
+          padding: 1px;}
+              h2{
+                  margin: 0;
+                  display: block;
+                  font-size: 20pt;
+                  padding-bottom: 10px;
+                  line-height: 20pt;
+              }
+              h1 small{
+                  display: table;
+          background: #000;
+          color: #fff;
+          padding: 1px;}
+    
+              h3{
+                  margin: 0;
+                  font-size: 8pt;
+              }
+              span {
+                  font-size: 22pt;
+                  font-weight: 600;
+              }
+              .descricao{
+                 font-size: 10pt;
+      font-weight: 400;
+      word-wrap: break-word; /* Quebra a linha quando necessário */
+      overflow-wrap: break-word; /* Quebra a linha quando necessário */
+              }
+          </style>
+    
+          <body>
+          <div class="label">
+            <div></div>
+              <div class="left">
+                  <h2><small>NÚMERO DA O.S</small>#${id}</h2>
+                  <h3>VOLUME: ${unit}/${total}</h3>
+              </div>
+              <div class="right">
+                  <h1><small>SOLICITANTE</small>${solicitante}</h1>
+                  <h1 style="font-size: 8px;"><small  style="margin-bottom: 1px;">SETOR/LOCAL</small>${location}</h1>
+                  <h1 style="font-size: 8pt;"><small>PROBLEMA RELATADO</small> <span class="descricao">Computador travando, vamos ver como é tratado um texto grande, que excede o tamanho da etiqueta.</span></h1>
+              </div>
+          </div>
+          </body>
+          </html>

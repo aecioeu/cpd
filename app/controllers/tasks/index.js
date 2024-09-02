@@ -129,41 +129,30 @@ var cron = require("node-cron");
 
 // Estrutura /TASKS
 
+var user = {}
+
+
 let { addUser, getUsersInRoom, getUser, removeUser} =  require('../../config/ioFunctions');
 //const { config } = require("process");
 
 global.io.on("connection", async function (socket) {
- // console.log("👾 New socket connected! >>", socket.id);
+ console.log("👾 New socket connected! >>", socket.id);
 
 
+  socket.on('join', async ({ name, tecnico_id }, callback) => {
 
-  socket.on('join', ({ name, tecnico_id }, callback) => {
-
- 
-    const { error, user } = addUser(
+      const { error, user } = addUser(
         { id: socket.id, 
           name, 
           tecnico_id 
         });
+     
+       // var data = await db.getMyTaskCount(tecnico_id);
+  
 
-    if (error) return callback(error);
-
-    // Emit will send message to the user
-    // who had joined
-    socket.emit('alert', { user: 'admin', text:
-        `${user.name},
-        welcome to room ${user.room}.` });
-
-    // Broadcast will send message to everyone
-    // in the room except the joined user
-    socket.broadcast.emit('alert', { user: "admin",
-        text: `${user.name}, has joined` });
-
-    io.to(user.id).emit('alert', {
-        room: user
-    });
-    callback();
-})
+       // console.log(user)
+        callback();
+    })
 
 
 
@@ -180,26 +169,16 @@ socket.on('disconnect', () => {
 })
 
 
-  const data = await db.getTaskCount();
-  socket.emit("getCountTasks", data);
+
+
+ 
+var data = await db.getTaskCount();
+socket.emit("getCountTasks", data);
 
 
 });
 
-router.get("/test", function (req, res) {
-  res.send("Service home page");
 
-  io.sockets.emit("getCountTasks", [
-    {
-      status: "archive",
-      count: 99,
-    },
-    {
-      status: "complete",
-      count: 99,
-    },
-  ]);
-});
 
 router.get("/count", isLoggedIn, async function (req, res) {
   //res.send('Service home page');
@@ -687,7 +666,7 @@ router.post("/sign", async function (req, res) {
       tpl += `_${patrimonio.registration} - ${patrimonio.name}_\n`;
     });
 
-    console.log(dataTarefa)
+    //console.log(dataTarefa)
 
   var dataTarefa = {
     task_id: dados.task_id,
@@ -741,7 +720,7 @@ router.get("/print/:task_id", async function (req, res) {
   const taskHistory = await db.getTaskHistory(task_id);
   const taskTecnico = await db.getTasktecnicos(task_id);
   const taskSign = await db.getTaskSign(task_id);
-  console.log(taskSign, taskTecnico);
+  //console.log(taskSign, taskTecnico);
 
   var assingned = false;
  /* if (taskTecnico) {
@@ -766,7 +745,7 @@ router.get("/takeaway/:task_id", isLoggedIn, async function (req, res) {
   const taskHistory = await db.getTaskHistory(task_id);
   const taskTecnico = await db.getTasktecnicos(task_id);
   const taskSign = await db.getTaskSign(task_id);
-  console.log(taskSign);
+ // console.log(taskSign);
 
   var assingned = false;
   if (taskTecnico) {
@@ -976,13 +955,13 @@ router.get("/view/:task_id", async function (req, res) {
   const taskTecnico = await db.getTasktecnicos(task_id);
   const mention = await db.getActiveTecnicos()
   const oficios = await db.getOficios(task_id)
-  console.log(oficios)
+  //console.log(oficios)
 
    pool.query("UPDATE notifications SET status = '1' WHERE task_id = ?", task_id);
 
 
   var assingned = false;
-console.log("USER DATE" + req.user)
+//console.log("USER DATE" + req.user)
   if (taskTecnico) {
     var tecnico_assingned = taskTecnico.map((el) => el.id_tecnico);
     assingned = tecnico_assingned.includes(req.user.id.toString());
@@ -1103,7 +1082,7 @@ router.get("/edit/:task_id", async function (req, res) {
   const taskHistory = await db.getTaskHistory(task_id);
   const taskTecnico = await db.getTasktecnicos(task_id);
 
-  console.log(data);
+  //console.log(data);
 
   var assingned = false;
   if (taskTecnico) {

@@ -15,7 +15,7 @@ router.get('/search', async function (req, res) {
 
     let sv = []
 
-    let rows = await pool.query("SELECT * FROM patrimonio WHERE registration LIKE ? OR name LIKE ? LIMIT 10", [`%${term}%`, `%${term}%`]);  
+    let rows = await pool.query("SELECT * FROM patrimonio WHERE registration LIKE ? OR name LIKE ? LIMIT 20", [`%${term}%`, `%${term}%`]);  
   
     if (rows.length > 0) {
       for (const row of rows) {

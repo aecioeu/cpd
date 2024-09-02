@@ -41,6 +41,8 @@ router.post('/all', async function (req, res) {
     term: req.body.term
   };
 
+  //console.log(data)
+
  var rows = await db.getTask((data))
  res.json(rows);
 

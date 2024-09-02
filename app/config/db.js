@@ -6,6 +6,8 @@ const getTask = async (data) => {
 
  // if(data.show == 'false') data.show = 'new'
 
+
+
   if(data.show == 'complete'){
 
     var rows = await pool.query(`Select
@@ -23,10 +25,20 @@ const getTask = async (data) => {
     tasks.created as created_task
     From tasks 
     INNER JOIN servidores ON servidores.id = tasks.id_servidor 
-    WHERE status = ? AND (task_id LIKE ? OR servidores.name LIKE ?) AND (tasks.created BETWEEN ? AND ?) ORDER BY tasks.priority ASC, tasks.created DESC`, 
-    [data.show, `%${data.term}%`, `%${data.term}%`, data.start, data.end]);
+    WHERE status = ? AND (task_id LIKE ? OR servidores.name LIKE ?) ORDER BY tasks.priority ASC, tasks.created DESC`, 
+    [data.show, `%${data.term}%`, `%${data.term}%`]);
 
   }
+
+  /*
+  
+      *,
+    tasks.created as created_task
+    From tasks 
+    INNER JOIN servidores ON servidores.id = tasks.id_servidor 
+    WHERE status = ? AND (task_id LIKE ? OR servidores.name LIKE ?) AND (tasks.created BETWEEN ? AND ?) ORDER BY tasks.priority ASC, tasks.created DESC`, 
+    [data.show, `%${data.term}%`, `%${data.term}%`, data.start, data.end]);
+  */
 
  
  
@@ -149,6 +161,8 @@ const getMyTask = async (data) => {
 INNER JOIN TB_Contrato ON TB_Contrato.id_contrato = TB_ContratoCotista.id_contrato
 INNER JOIN TB_Cotista ON TB_Cotista = TB_ContratoCotista.id_cotista */
 
+
+//console.log(data)
 const tasks = [] 
 
 
@@ -158,10 +172,9 @@ const tasks = []
   INNER JOIN servidores ON servidores.id = tasks.id_servidor
   WHERE task_tecnico.id_tecnico = ?
   AND tasks.status = ?
-  AND tasks.task_id LIKE ? 
-  AND (tasks.created BETWEEN ? AND ?) 
+  AND (tasks.task_id LIKE ? OR servidores.name LIKE ?)
   ORDER BY tasks.priority ASC, tasks.created DESC`, 
-  [data.tecnico_id, `pendding`,`%${data.term}%`, data.start, data.end]);
+  [data.tecnico_id, `pendding`,`%${data.term}%`, `%${data.term}%`]);
  
   if (rows.length > 0) {
 
@@ -209,6 +222,26 @@ const tasks = []
 
 };
 
+const getMyTaskCount = async (tecnico_id) => {
+ 
+    // Primeiro SELECT para contar as tarefas que correspondem aos critérios
+    let rows = await pool.query(`SELECT 
+       tasks.status As status,
+       COUNT(*) as count
+        FROM task_tecnico
+        INNER JOIN tasks ON tasks.task_id = task_tecnico.task_id
+        INNER JOIN servidores ON servidores.id = tasks.id_servidor
+        WHERE task_tecnico.id_tecnico = ?
+        AND tasks.status = ?`, 
+        [tecnico_id, `pendding`]
+    );
+
+
+
+    if (rows.length > 0) return rows;
+    return false;
+};
+
 const getTaskCount = async () => {
 
   let rows = await pool.query(`Select
@@ -223,6 +256,9 @@ Group By
   return false;
 
 };
+
+
+
 
 const getPatrimonioServicebyTask = async (task_id, registration) => {
 
@@ -705,7 +741,8 @@ Where
 Group By
    tasks.task_id,
     tasks.created,
-    tasks.updated`, 
+    tasks.updated,
+    tasks.type`, 
   [data.start, data.end]);
  
   if (rows.length > 0) return rows
@@ -826,6 +863,7 @@ hour(tasks.updated)`,
   getService,
   getPatrimonioServicebyTask,
   getMyTask,
+  getMyTaskCount,
   getTaskCount,
   getTasktecnicos,
   getTaskArchive,

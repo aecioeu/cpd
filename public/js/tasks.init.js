@@ -103,9 +103,9 @@ function formatRepo(data) {
 function initTasks(date) {
   $(".tarefas").empty();
 
-  if($("#status").val() == 'complete'){
+ // if($("#status").val() == 'complete'){
     $('.date-search').remove()
-  }
+ // }
   
 
   var data = {

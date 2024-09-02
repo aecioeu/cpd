@@ -8,65 +8,72 @@
   <!-- App favicon -->
   <link rel="shortcut icon" href="/img/logo-sm.svg">
 
+  <!-- App css -->
+  <link href="/css/bootstrap.min.css?v=1.0.1" rel="stylesheet" type="text/css" id="bs-default-stylesheet">
+  <link href="/css/app.min.css?v=1.0.1" rel="stylesheet" type="text/css" id="app-default-stylesheet">
+
+  <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" id="bs-dark-stylesheet" disabled>
+  <link href="/css/app.min.css?v=1.0.1" rel="stylesheet" type="text/css" id="app-dark-stylesheet" disabled>
+  <link href="/css/select2.min.css?v=1.0.1" rel="stylesheet" type="text/css" id="app-dark-stylesheet">
+  <link href="/css/dx.light.css" rel="stylesheet" type="text/css" id="app-default-stylesheet">
+
+  <!-- icons -->
+  <link href="/css/icons.min.css" rel="stylesheet" type="text/css">
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="text/javascript" src="/js/qz.js"></script>
+  <script>
 
 
-<!-- App css -->
-<link href="/css/bootstrap.min.css?v=1.0.1" rel="stylesheet" type="text/css" id="bs-default-stylesheet">
-<link href="/css/app.min.css?v=1.0.1" rel="stylesheet" type="text/css" id="app-default-stylesheet">
+qz.websocket.connect({ host: "10.1.1.111" }).then(function () {
 
+qz.printers.find("ETIQUETA").then(function (found) {
+  //alert("Printer: " + found);
+  console.log(found)
 
-<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" id="bs-dark-stylesheet" disabled>
-<link href="/css/app.min.css?v=1.0.1" rel="stylesheet" type="text/css" id="app-dark-stylesheet" disabled>
-<link href="/css/select2.min.css?v=1.0.1" rel="stylesheet" type="text/css" id="app-dark-stylesheet" >
-<link href="/css/dx.light.css" rel="stylesheet" type="text/css" id="app-default-stylesheet">
-
-<!-- icons -->
-<link href="/css/icons.min.css" rel="stylesheet" type="text/css">
-<script src="/socket.io/socket.io.js"></script>
-<script type="text/javascript" src="/js/qz.js"></script>
-<script>
+  togglePrinterStatus(true)
+});
 
 
 
 
-qz.websocket.connect({host: "localhost", usingSecure : true }).then(function() {
-   alert("Connected!");
 
-qz.printers.find().then(function(data) {
-  console.log("printers" + data)
+
+
+
+
+// alert("Connected!");
+
+/*qz.printers.find().then(function(data) {
+  //console.log("printers" + data)
       var list = '';
       for(var i = 0; i < data.length; i++) {
          list += "&nbsp; " + data[i] + "<br/>";
      }
-     console.log(list)
+   //  console.log(list)
    //  displayMessage("<strong>Available printers:</strong><br/>" + list);
-  }).catch(function(e) { console.error(e); });
+  }).catch(function(e) { console.error(e); });*/
 
 });
+    const socket = io.connect(`${window.location.origin}`);
+
+    socket.emit('join', { name: '<%-user.name%>', tecnico_id: '<%-user.id%>' }, (error) => {
+      if (error) {//  alert(error);
+      }
+    })
+    
+
+    socket.on('connect', function () {
 
 
-const socket = io.connect(`${window.location.origin}`);
+      socket.on('getCountTasks', function (data) {
+        console.log("data", data);
+        taskCount(data)
+      });
 
 
-socket.on('connect', function(){
-
-  socket.emit('join',{name : '<%-user.name%>', tecnico_id: '<%-user.id%>'}, (error) => {
-            if(error) {
-               // alert(error);
-            }
-        })
-
-
-socket.on('getCountTasks', function(data){
- // console.log(data);
-  //taskCount(data)    
-});
-
-socket.on('mention', function(data){
-$('.notification_count').text(parseFloat($('.notification_count').text()) + 1)
-$('.simplebar-content').prepend(`
-
-                                    <a href="/tasks/view/${data.task_id}" class="dropdown-item notify-item border-bottom">
+      socket.on('mention', function (data) {
+        $('.notification_count').text(parseFloat($('.notification_count').text()) + 1)
+        $('.simplebar-content').prepend(`<a href="/tasks/view/${data.task_id}" class="dropdown-item notify-item border-bottom">
                                         <div class="notify-icon">
                                             <img src="/img/alert.png" class="img-fluid rounded-circle" alt="">
                                         </div>
@@ -76,35 +83,33 @@ $('.simplebar-content').prepend(`
                                         </p>
                                     </a>
 
-
-
 `)
 
 
 
-});
+      });
 
 
 
 
-        return () => {
-            socket.emit('disconnect');
-            socket.off();
-        }
-
-
-        
- 
-});
+      return () => {
+        socket.emit('disconnect');
+        socket.off();
+      }
 
 
 
 
-socket.on('alert', function(data){
- // console.log(data);
-});
+    });
 
-  
-</script>
+
+
+
+    socket.on('alert', function (data) {
+      // console.log(data);
+    });
+
+
+  </script>
 
 </head>
