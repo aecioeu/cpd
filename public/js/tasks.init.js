@@ -140,7 +140,7 @@ const flatpickr = $("#range-datepicker").flatpickr({
   mode: "range",
   dateFormat: "d/m/Y",
   defaultDate: [
-    moment(new Date()).subtract(30, "days").format("DD/MM/YYYY"),
+    moment(new Date()).subtract(90, "days").format("DD/MM/YYYY"),
     moment(new Date()).format("DD/MM/YYYY"),
   ],
   onChange: function (selectedDates, dateStr, instance) {

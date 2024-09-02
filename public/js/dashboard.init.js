@@ -640,7 +640,7 @@ $('#busca').on("input", function() {
         locale: "pt",
         mode: "range",
         dateFormat: "d/m/Y",
-        defaultDate : [moment(new Date()).subtract(7, 'days').format("DD/MM/YYYY"), moment(new Date()).format("DD/MM/YYYY")],
+        defaultDate : [moment(new Date()).subtract(90, 'days').format("DD/MM/YYYY"), moment(new Date()).format("DD/MM/YYYY")],
         onChange: function(selectedDates, dateStr, instance) {
             initTasks(selectedDates)
         },
