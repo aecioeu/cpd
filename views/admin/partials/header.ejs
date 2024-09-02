@@ -24,7 +24,7 @@
   <script>
 
 
-qz.websocket.connect({ host: "10.1.1.111" }).then(function () {
+qz.websocket.connect({ host: "10.1.1.111" , usingSecure : true}).then(function () {
 
 qz.printers.find("ETIQUETA").then(function (found) {
   //alert("Printer: " + found);
