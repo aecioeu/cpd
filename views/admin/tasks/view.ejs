@@ -429,14 +429,13 @@ tbody, td, tfoot, th, thead, tr {
                           <div class="fs-13 mt-2 mb-2">
                           <div class="text-end d-print-none">
                         
-                            <button type="button" onclick="checkPrintEtiquetas('<%-data.task_id%>', '<%-data.registration%> - <%-data.name%>', '<%-data.location%>', '<%-data.description%>', 'Quantas etiquetas deseja Gerar ?', 1)" class="btn btn-primary">IMPRIMIR ETIQUETAS</button>
+                            <button type="button" onclick="checkPrintEtiquetas('<%-data.task_id%>', '<%-data.registration%> - <%-data.name%>', '<%-data.location%>', '<%-data.description.replace(/(\r\n|\n|\r)/gm, ``)%>', 'Quantas etiquetas deseja Gerar ?', 1)" class="btn btn-primary">IMPRIMIR ETIQUETAS</button>
 
                             </div>
                           </div>
                         </div>
 
-
-                       
+                    
 
                   
 
