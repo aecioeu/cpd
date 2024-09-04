@@ -29,6 +29,7 @@ function tecnicos(tecnicos) {
 }
 
 function tplte(row, time) {
+  console.log(row)
   return `<div class="col-xl-4 col-lg-6">
       <div class="card card-${row.priority}" style="animation: f ease ${time}s;">
           <a href="/tasks/${row.status == "archive" && row.type == "in"
@@ -69,7 +70,7 @@ function tplte(row, time) {
                               </span>
                           </li>
                           <li style="display: contents;">
-                          ${priority(row.priority)} 
+                          ${priority(row.priority)} ${(row.type == "in") ? `<i class="text-muted uil uil-desktop me-1"></i>` : `<i class="text-muted uil uil-user me-1"></i>`} 
                           </li>
                          </ul>
                         
@@ -183,13 +184,13 @@ function showTasksDates(data) {
 
       tpl +=`<ul style="list-style: none;"> <li class="position-relative">
       <hr>
-      <h4><span class="badge bg-light text-dark position-absolute top-0 start-50 translate-middle fs-17">${cards.date}</span></h4>
+      <h4><span class="badge bg-light text-dark position-absolute top-0 start-50 translate-middle fs-17">${moment(cards.date).format('MM/DD/YYYY')}</span></h4>
       </li></ul>`
 
 
       //sao os cards
       cards.tasks.forEach(function (card, index) {
-        tpl += tpltedate(card, ((index*200)/1000));
+        tpl += tpltedate(card, ((index*20)/1000));
       });
 
 

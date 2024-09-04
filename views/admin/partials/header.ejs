@@ -41,6 +41,7 @@ qz.printers.find("ETIQUETA").then(function (found) {
 
 
 
+
 // alert("Connected!");
 
 /*qz.printers.find().then(function(data) {
@@ -66,8 +67,11 @@ qz.printers.find("ETIQUETA").then(function (found) {
 
 
       socket.on('getCountTasks', function (data) {
-        console.log("data", data);
-        taskCount(data)
+       // console.log("data", data);
+        if(data){
+          taskCount(data)
+        }
+        
       });
 
 

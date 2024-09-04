@@ -20,7 +20,7 @@ router.get('/search', async function (req, res) {
     if (rows.length > 0) {
       for (const row of rows) {
 
-        let services  = await pool.query("SELECT * FROM task_service WHERE registration = ? LIMIT 0,20", [row.registration]);
+        let services  = await pool.query("SELECT * FROM task_service WHERE registration = ?  ORDER BYtaskCount(data) task_service.created DESC LIMIT 0,50 ", [row.registration]);
         row.services = services
         sv.push(row)
       }
