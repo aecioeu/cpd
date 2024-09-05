@@ -682,9 +682,14 @@ router.post("/sign", async function (req, res) {
     tecnico_name: req.user.name,
   };
 
+   //atualizar o servidor como o telefone
+  await pool.query(
+    "UPDATE servidores SET phone = ? , whatsapp = ? WHERE id = ?",
+    [dados.sign_phone, dados.sign_whatsapp, dados.id_servidor]
+  );
+
   await pool.query("INSERT INTO task_sign SET ?", dataTarefa, function (err, result) {
     if (err) console.log(err);
-    //atualizar o servidor como o telefone
 
     db.insertHistory("task", `Retirada de Patrimonio` , `${dados.sign_registration} - ${dados.sign_name} (${dados.sign_phone}) realizou a retirada dos patrimonios da Tarefa #${dados.task_id}`, req.user.id, dados.task_id)
     //enviando para o contato que deu entrada
@@ -992,13 +997,16 @@ router.get("/oficio-view/:oficio_id", async function (req, res) {
   const task_id =oficio[0].task_id;
   const data = await db.getTaskData(task_id);
   const taskTecnico = await db.getTasktecnicos(task_id);
+  const tecnico = await db.getTecnicoById(oficio[0].tecnico_id)
+  console.log(tecnico)
   //await pool.query("UPDATE notifications SET status = '1' WHERE task_id = ?", task_id);
 
   res.render("admin/tasks/oficio-view.ejs", {
     user: req.user,
     data: data[0],
     oficio : oficio[0],
-    task_tecnico: taskTecnico
+    task_tecnico: taskTecnico,
+    tecnico: tecnico[0]
   });
 });
 

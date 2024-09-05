@@ -6,6 +6,9 @@ module.exports = function (app, passport) {
     const index = require('./controllers/index.js');
     app.use('/', index);
 
+    const api_laudos = require('./controllers/api/laudos/index.js');
+    app.use('/laudos', api_laudos);
+
     const api = require('./controllers/api/api.js');
     app.use('/update', api);
     

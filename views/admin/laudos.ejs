@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+
+<html lang="pt-br" data-textdirection="ltr">
+<%- include("partials/header") %>
+<link href="/css/flatpickr.min.css" rel="stylesheet" type="text/css">
+    <style>
+        .only-print{
+          display: none;
+        }
+    .hide{
+      display: none;
+    }
+      @media print {
+    
+        .only-print{
+          display: block;
+        }
+    
+        body{
+          color: #000 !important;
+        }
+        .select2 , .tasks_notes{
+          display: none !important
+        }
+    
+        [data-bs-target="#offcanvasRight"]{
+          display: none !important
+    
+        }
+        body{
+          margin-left: 0px;
+        }
+    
+        .noprint{
+          display: none !important;
+        }
+    
+        .border-right{
+          border-right: 1px solid #ebeef5 !important;
+        }
+        hr:not([size]) {
+        height: 1px;
+        }
+    
+      
+    
+        .table > :not(:last-child) > :last-child > * {
+        border-bottom-color: #ebeef5;
+    }
+    
+    tbody, td, tfoot, th, thead, tr {
+        border-color: inherit;
+        border-style: solid;
+        border-width: 1px;
+        border-color: #ebeef5;
+        border-radius: 47px;
+    }
+    
+        hr {
+        margin: 1.5rem 0;
+        height: 10px;
+        border-bottom: 1px solid #ebeef5 !important;
+        
+        color: #000 !important;
+        background-color: #fff;
+        border: 0;
+        opacity: 1;
+    }
+        [data-bs-target="#offcanvasRight"]{
+          display: none !important
+    
+        }
+        body{
+          margin-left: 0px;
+        }
+    
+    
+    
+      }
+    
+      .offcanvas-end{
+    
+        width: 40vw;
+      }
+    
+      div#offcanvasBottom{
+      height: 50vh;
+     }
+     .message{
+      padding: 2.5rem 3rem  !important
+     }
+    </style>
+
+
+
+    <!-- BEGIN: Body-->
+
+    <body data-sidebar-size="default" data-layout-width="fluid" data-layout-menu-position="fixed"
+        data-sidebar-color="light" data-sidebar-showuser="false" data-topbar-color="light">
+        <!-- Begin page -->
+        <div id="wrapper">
+
+            <%- include("partials/nav") %>
+                <%- include("partials/menu") %>
+
+                    <!-- ============================================================== -->
+                    <!-- Start Page Content here -->
+                    <!-- ============================================================== -->
+
+                    <div class="content-page">
+                        <div class="content">
+
+                            <div class="container-fluid">
+
+                             
+
+
+                <div class="row page-title align-items-center">
+                    <div class="col-sm-7 col-xl-6">
+                        <div>
+                        <h4 class="mb-1 mt-3">LAUDOS</h4>
+                       
+                        </div>
+                    </div>
+                    <div class="col-sm-5 col-xl-6">
+                        
+                        <div class="d-lg-flex align-items-right mb-2 mt-2" style="text-align: right; float: right;">
+                            <div class="file-search  me-1">
+                                <form>
+                                    <div class="input-group align-items-center">
+                                        <i class="bi bi-search icon-search bg-light ms-2"></i>
+                                        <input type="text" id="busca" class="form-control search-input bg-light border-0 mt-1" placeholder="Buscar pela Plaqueta">
+                                    </div>
+                                </form>
+                            </div>
+             
+                        </div>
+                    </div>
+                </div>
+
+                          
+                             
+                  <!-- Start Content-->
+        <div class="container-fluid">
+
+            <!-- start page title -->
+            <div class="row">
+              <div class="col-12">
+                <div class="page-title-box">
+                  <h4 class="page-title">Tarefa #
+                  </h4>
+                  <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                      <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
+                      <li class="breadcrumb-item"><a href="javascript: void(0);">Tarefas</a></li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- end page title -->
+  
+            <div class="row">
+              <div class="col-xl-12">
+
+                <div class="card">
+
+                    <div class="card-body">
+
+                <table class="table table-striped mb-0">
+                    <thead>
+                        <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">DATA</th>
+                        <th scope="col">RESPONSÁVEL</th>
+                        <th scope="col">TIPO</th>
+                        <th scope="col">VISUALIZAR TAREFA</th>
+                        <th scope="col">VISUALIZAR LAUDO</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    <% oficios.forEach((oficio, index) => { %>
+
+                       
+                    <tr>
+                      <th scope="row"><%-index+1%></th>
+                      <td><%-oficio.created.toLocaleString()%></td>
+                      <td><%-oficio.tecnico_name%></td>
+                      <td>LAUDO TÉCNICO <%-oficio.tipo%> Nº<%-oficio.number%>/<%-oficio.year%></td>
+                      <td><a href="/tasks/view/<%-oficio.task_id%>"><label class="badge badge-soft-primary">VISUALIZAR TAREFA</label></a></td>
+                      <td><a href="/tasks/oficio-view/<%-oficio.id%>" class="subject"><label class="badge badge-soft-success">VISUALIZAR</label>
+                      </a></td>
+                   </tr>
+                     
+                   
+                     
+    
+                     
+                    <%})%>
+                  </tbody>
+                </table>
+
+
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+
+
+                              
+
+                            </div>
+                        </div> <!-- content -->
+
+                    </div>
+
+                    <%- include('partials/footer') %>
+                    <script src="/js/patrimonio.init.js?v=<%-Date.now()%>"></script>
+
+
+
+
+
+
+    </body>
+    <!-- END: Body-->
+
+</html>

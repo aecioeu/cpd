@@ -388,6 +388,15 @@ const getTaskData = async (task_id) => {
  
   };
 
+  const getTecnicoById = async (id) => {
+
+    let rows = await pool.query(`SELECT * FROM tecnicos WHERE id = ?`, [id]);
+    if (rows.length > 0) return rows;
+    return false;
+
+ 
+  };
+
   const getTasktecnicos = async (task_id) => {
 
     let rows = await pool.query(`SELECT * FROM task_tecnico WHERE task_id = ? ORDER BY created DESC`, [task_id]);
@@ -490,6 +499,17 @@ const getTaskData = async (task_id) => {
 const getOficios = async (task_id) => {
 
   let rows = await pool.query("SELECT * FROM oficios WHERE task_id = ?", [task_id]);
+  if (rows.length > 0) return rows;
+  return false;
+ 
+ /* if (rows.length > 0) return   res.json(rows);
+  return res.json({status: "Sorry! Not found."});*/
+
+};
+
+const getAllOficios = async () => {
+
+  let rows = await pool.query("SELECT * FROM oficios ORDER BY created DESC");
   if (rows.length > 0) return rows;
   return false;
  
@@ -854,6 +874,7 @@ hour(tasks.updated)`,
   
 
   module.exports = {
+    getAllOficios,
     getOficios,
     getOficioPatrimonio,
     getOficio,
@@ -866,6 +887,7 @@ hour(tasks.updated)`,
   getMyTaskCount,
   getTaskCount,
   getTasktecnicos,
+  getTecnicoById,
   getTaskArchive,
   getTask,
   updateTaskDate, 
